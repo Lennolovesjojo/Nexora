@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="de" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bewerbung · Nexora</title>
+<meta name="description" content="Bewirb dich bei Nexora als Vertriebler oder Developer (m/w/d), in zwei Minuten.">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nexora">
+<meta property="og:locale" content="de_DE">
+<meta property="og:title" content="Bewerbung · Nexora">
+<meta property="og:description" content="Bewirb dich bei Nexora als Vertriebler oder Developer (m/w/d), in zwei Minuten.">
+<meta property="og:image" content="assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nexora Webagentur: Websites, die überzeugen.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0F0C22">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="fonts/sora-latin-4fa0aa.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/inter-latin-567244.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>(function(c){c.remove("no-js");c.add("js");try{var n=performance.getEntriesByType("navigation")[0];if(n&&n.type==="navigate"&&document.referrer.indexOf(location.origin+"/")===0&&!matchMedia("(prefers-reduced-motion: reduce)").matches){c.add("entering");setTimeout(function(){c.remove("entering")},2500)}}catch(e){}})(document.documentElement.classList);</script>
+</head>
+<body>
+<a class="skip" href="#main">Zum Inhalt springen</a>
+<div class="curtain" aria-hidden="true"><img src="assets/logo-mark-144.png" alt="" width="72" height="72" fetchpriority="low"></div>
+<div class="progress" aria-hidden="true"></div>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Nexora Startseite"><img src="assets/logo-lockup-80.png" srcset="assets/logo-lockup-80.png 357w, assets/logo-lockup-120.png 536w, assets/logo-lockup.png 781w" sizes="(max-width: 600px) 152px, 178px" alt="Nexora" width="179" height="40" fetchpriority="high"></a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="index.html">Start</a>
+      <a href="leistungen.html">Leistungen</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="karriere.html" aria-current="page">Karriere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+    <a class="btn btn--grad btn--sm head-cta magnetic" href="termin.html">Beratungstermin buchen <span class="arr" aria-hidden="true">→</span></a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
+  </div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile Navigation">
+    <a href="index.html">Start</a>
+    <a href="leistungen.html">Leistungen</a>
+    <a href="ueber-uns.html">Über uns</a>
+    <a href="karriere.html" aria-current="page">Karriere</a>
+    <a href="kontakt.html">Kontakt</a>
+    <a class="btn btn--grad" href="termin.html">Beratungstermin buchen <span class="arr" aria-hidden="true">→</span></a>
+  </nav>
+</header>
+<main id="main">
+<section class="page-hero" style="padding-bottom:clamp(64px,8vw,120px)">
+  <div class="wrap book">
+    <div class="book-side book-intro">
+      <p class="crumbs"><a href="index.html">Start</a> / <a href="karriere.html">Karriere</a> / Bewerbung</p>
+      <h1 class="reveal">Jetzt <span class="grad-text">bewerben</span></h1>
+      <p class="lede reveal" data-d="1">Zwei Minuten, ein Formular. Lebenslauf hochladen oder Profil verlinken, ein Anschreiben brauchst du nicht.</p>
+    </div>
+    <div class="book-side book-details">
+      <ul class="facts reveal" data-d="2">
+        <li><span>Dauer</span>ca. 2 Minuten</li>
+        <li><span>Unterlagen</span>Lebenslauf, gern als PDF</li>
+        <li><span>Antwort</span>innerhalb weniger Tage</li>
+      </ul>
+      <div class="reveal" data-d="3" style="display:grid;gap:16px">
+        <span class="eyebrow">So geht es weiter</span>
+        <ol class="agenda"><li>Wir lesen deine Bewerbung persönlich</li><li>Kennenlernen per Video</li><li>Fachgespräch mit einer typischen Aufgabe</li><li>Zusage und Onboarding</li></ol>
+      </div>
+    </div>
+    <div class="book-cal reveal" data-d="1">
+      <form class="apply-form" id="applyForm" action="/api/bewerbung" method="post" enctype="multipart/form-data" novalidate data-mail="karriere@nexora.de" data-max-mb="4">
+        <div class="af-head"><h2>Deine Bewerbung</h2><p>Felder mit „optional“ kannst du leer lassen.</p></div>
+        <fieldset class="af-field">
+          <legend>Stelle</legend>
+          <div class="segs"><label class="seg"><input type="radio" name="stelle" value="vertrieb" checked><span>Vertrieb (m/w/d)</span></label><label class="seg"><input type="radio" name="stelle" value="developer"><span>Developer (m/w/d)</span></label><label class="seg"><input type="radio" name="stelle" value="initiativ"><span>Initiativbewerbung</span></label></div>
+        </fieldset>
+        <label class="af-field"><span>Vor- und Nachname</span><input type="text" name="name" autocomplete="name" maxlength="120" required></label>
+        <div class="af-grid">
+          <label class="af-field"><span>E-Mail</span><input type="email" name="email" autocomplete="email" maxlength="160" required></label>
+          <label class="af-field"><span>Telefon <i>optional</i></span><input type="tel" name="telefon" autocomplete="tel" maxlength="40"></label>
+        </div>
+        <div class="af-field">
+          <span>Lebenslauf <i>optional</i></span>
+          <label class="drop">
+            <input type="file" name="lebenslauf" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+            <span class="drop-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4.5M7.5 9 12 4.5 16.5 9"/><path d="M4.5 14.5v3a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3"/></svg></span>
+            <span class="drop-txt"><b>Datei auswählen</b> oder hierher ziehen<small>PDF, Word oder Bild, max.&nbsp;4&nbsp;MB</small><em class="drop-name"></em></span>
+          </label>
+        </div>
+        <label class="af-field"><span>LinkedIn, Xing oder Portfolio <i>optional</i></span><input type="text" name="link" inputmode="url" autocomplete="url" placeholder="https://" maxlength="300"></label>
+        <label class="af-field"><span>Erzähl uns kurz von dir <i>optional</i></span><textarea name="nachricht" rows="4" maxlength="5000" placeholder="Was machst du gerade, und was reizt dich an Nexora?"></textarea></label>
+        <label class="af-check"><input type="checkbox" name="datenschutz" value="ja" required><span>Ich bin einverstanden, dass Nexora meine Angaben zur Bearbeitung meiner Bewerbung verarbeitet. Mehr dazu in der <a href="datenschutz.html#bewerbung">Datenschutzerklärung</a>.</span></label>
+        <div class="hp" aria-hidden="true"><label>Firma <input type="text" name="firma" tabindex="-1" autocomplete="off"></label></div>
+        <div class="af-actions">
+          <button class="btn btn--grad magnetic af-submit" type="submit"><span class="af-label">Bewerbung absenden</span> <span class="arr" aria-hidden="true">→</span></button>
+          <p class="af-msg" role="alert"></p>
+        </div>
+        <div class="af-done" hidden>
+          <span class="af-done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
+          <h2>Danke für deine Bewerbung!</h2>
+          <p>Sie ist gut bei uns angekommen. Wir melden uns innerhalb weniger Tage bei dir, eine Bestätigung ist schon unterwegs in dein Postfach.</p>
+          <a class="btn btn--ghost" href="karriere.html">Zurück zur Karriereseite</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <img src="assets/logo-lockup-white-88.png" srcset="assets/logo-lockup-white-88.png 393w, assets/logo-lockup-white-132.png 589w, assets/logo-lockup-white.png 781w" sizes="196px" alt="Nexora" width="196" height="44" loading="lazy">
+        <p class="foot-claim">Your Vision, Our Code. Websites für Unternehmen, gebaut, gehostet und betreut aus einer Hand.</p>
+      </div>
+      <div><h2>Leistungen</h2><ul><li><a href="leistungen.html#kaufen">Website kaufen</a></li><li><a href="leistungen.html#mieten">Website mieten</a></li><li><a href="leistungen.html#betreuung">Website-Betreuung</a></li><li><a href="leistungen.html#vergleich">Vergleich</a></li></ul></div>
+      <div><h2>Nexora</h2><ul><li><a href="ueber-uns.html">Über uns</a></li><li><a href="ueber-uns.html#team">Unser Team</a></li><li><a href="karriere.html">Karriere</a></li><li><a href="termin.html">Beratungstermin</a></li></ul></div>
+      <div><h2>Kontakt</h2><ul><li><a href="kontakt.html">Kontaktformular</a></li><li><a href="mailto:info@nexora.de">info@nexora.de</a></li><li><a href="https://wa.me/491724358302?text=Hallo%20Nexora%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Website." target="_blank" rel="noopener">WhatsApp</a></li><li><a href="impressum.html">Impressum</a></li><li><a href="datenschutz.html">Datenschutz</a></li></ul></div>
+    </div>
+    <div class="foot-big" aria-hidden="true"></div>
+    <div class="foot-bottom"><span>© <span data-year>2026</span> Nexora. Alle Rechte vorbehalten.</span><span>Webdesign · Entwicklung · Hosting · Betreuung</span></div>
+  </div>
+</footer>
+<script src="main.js"></script>
+</body>
+</html>

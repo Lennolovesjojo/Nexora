@@ -1,0 +1,8 @@
+{
+  "name": "nexora-website",
+  "private": true,
+  "description": "Website der Nexora Webagentur: statische Seiten und Vercel-Funktionen für Bewerbungs- und Kontaktformular",
+  "dependencies": {
+    "nodemailer": "^10.6.0"
+  }
+}

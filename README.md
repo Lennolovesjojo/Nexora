@@ -22,7 +22,8 @@ Die Website läuft auf Vercel im Team „Nexora“ (Pro-Tarif), Projekt `nexora-
 Frankfurt. Bis die eigene Domain verbunden ist, ist sie unter
 https://nexora-website-iota-ivory.vercel.app erreichbar. Vercel ist mit diesem Repository verbunden:
 
-- Jeder Push auf `main` geht automatisch online.
+- Jeder Push auf `main` geht automatisch online. Den Stand zeigt GitHub am Commit: Ein grüner Haken
+  heißt, die Seite ist aktualisiert, ein rotes Kreuz führt zum Fehlerprotokoll in Vercel.
 - Jeder andere Branch und jeder Pull Request bekommt eine eigene Vorschau-Adresse,
   die Live-Seite bleibt dabei unverändert.
 

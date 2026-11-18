@@ -6,13 +6,13 @@
  *
  * Einstellungen in Vercel unter Settings > Environment Variables (dieselben wie beim Bewerbungsformular):
  *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS   Zugang zum Absender-Postfach
- *   MAIL_TO     optional: Postfach für alle Formulare, mehrere mit Komma getrennt (Standard hier: info@nexora.de)
+ *   MAIL_TO     optional: Postfach für alle Formulare, mehrere mit Komma getrennt (Standard hier: info@infonexora.de)
  *   MAIL_FROM   optional: Absenderadresse (Standard: SMTP_USER)
  */
 "use strict";
 
 // ================= EINSTELLUNGEN =================
-const EMPFAENGER = process.env.MAIL_TO || "info@nexora.de";
+const EMPFAENGER = process.env.MAIL_TO || "info@infonexora.de";
 const ABSENDER_NAME = "Nexora Website";
 const BESTAETIGUNG = true;        // Eingangsbestätigung an die anfragende Person
 const ANTWORTZEIT = "in der Regel innerhalb eines Werktags";

@@ -8,7 +8,7 @@
  * Einstellungen in Vercel unter Settings > Environment Variables:
  *   SMTP_HOST   Postausgangsserver des Absender-Postfachs, z. B. smtp.ionos.de
  *   SMTP_PORT   465 (SSL, Standard) oder 587 (STARTTLS)
- *   SMTP_USER   Login des Absender-Postfachs, z. B. website@nexora.de
+ *   SMTP_USER   Login des Absender-Postfachs, z. B. info@infonexora.de
  *   SMTP_PASS   Passwort dieses Postfachs
  *   MAIL_TO     optional: Postfach für alle Formulare, mehrere mit Komma getrennt (Standard hier: __EMPFAENGER__)
  *   MAIL_FROM   optional: Absenderadresse (Standard: SMTP_USER)

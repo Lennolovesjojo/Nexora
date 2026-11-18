@@ -17,9 +17,9 @@ FONTS_GOOGLE = '''<link rel="preconnect" href="https://fonts.googleapis.com">
 
 NAV = [("index.html", "Start"), ("leistungen.html", "Leistungen"), ("ueber-uns.html", "Über uns"), ("karriere.html", "Karriere"), ("kontakt.html", "Kontakt")]
 
-# E-Mail-Adressen (Platzhalter, bis die echten Postfächer feststehen)
-INFO_MAIL = "info@nexora.de"          # allgemeiner Kontakt: Footer, Impressum, Kontaktformular
-CAREER_MAIL = "karriere@nexora.de"    # hier kommen die Bewerbungen aus dem Formular an (auch als Ausweichadresse angezeigt)
+# E-Mail-Adressen (Postfach bei Strato, Domain infonexora.de)
+INFO_MAIL = "info@infonexora.de"      # allgemeiner Kontakt: Footer, Impressum, Kontaktformular
+CAREER_MAIL = "info@infonexora.de"    # Bewerbungen (auch als Ausweichadresse angezeigt). Eigene Adresse wie karriere@ erst eintragen, wenn sie bei Strato existiert
 
 # Adresse der fertigen Website, z. B. "https://www.nexora.de" (ohne / am Ende).
 # Leer lassen, solange die Domain nicht feststeht. Gesetzt entstehen daraus Canonical-Links, sitemap.xml und absolute Vorschaubild-Links.

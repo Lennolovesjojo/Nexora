@@ -496,7 +496,7 @@
   if (cal && cal.dataset.url) {
     const u = new URL(cal.dataset.url);
     const q = u.searchParams;
-    q.set("embed_domain", location.hostname || "nexora.de");
+    q.set("embed_domain", location.hostname || "infonexora.de");
     q.set("embed_type", "Inline");
     q.set("hide_event_type_details", "1");   // Details stehen schon links auf der Seite
     q.set("hide_gdpr_banner", "1");

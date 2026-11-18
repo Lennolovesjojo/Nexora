@@ -35,20 +35,20 @@ erzeugten Dateien mit committen. Die HTML-Seiten, `api/*.js`, `vercel.json`, `pa
 
 ### Einmalig in Vercel
 
-1. Unter **Settings > Environment Variables** eintragen (Postfach, das die Formular-Mails verschickt):
+1. Unter **Settings > Environment Variables** stehen die Zugangsdaten des Postfachs, das die
+   Formular-Mails verschickt. Eingerichtet am 18.11.2026 für Production mit dem Strato-Postfach:
 
-   | Name | Beispiel |
+   | Name | Wert |
    | --- | --- |
-   | `SMTP_HOST` | `smtp.ionos.de` (steht beim E-Mail-Anbieter) |
-   | `SMTP_PORT` | `465` |
-   | `SMTP_USER` | `website@nexora.de` |
-   | `SMTP_PASS` | Passwort dieses Postfachs |
-   | `MAIL_TO` | optional: Postfach für beide Formulare, z. B. `info@nexora.de` (mehrere mit Komma getrennt) |
+   | `SMTP_HOST` | `smtp.strato.de` |
+   | `SMTP_PORT` | `465` (SSL; `587` mit STARTTLS geht auch) |
+   | `SMTP_USER` | `info@infonexora.de` (immer die vollständige Adresse) |
+   | `SMTP_PASS` | Passwort dieses Postfachs, nicht das vom Strato-Kundenlogin. Nur als Secret in Vercel |
+   | `MAIL_TO` | `info@infonexora.de`: Postfach für beide Formulare (mehrere mit Komma getrennt) |
 
    Ohne `MAIL_TO` gehen Bewerbungen an `CAREER_MAIL` und Anfragen an `INFO_MAIL` (siehe unten).
-   Solange die eigene Domain fehlt, geht auch ein bestehendes Postfach: dessen Zugangsdaten in `SMTP_*`,
-   die Empfängeradresse in `MAIL_TO`.
-   Danach unter **Deployments** einmal **Redeploy**, damit die Werte gelten.
+   Wird ein Wert geändert, zum Beispiel ein neues Postfach-Passwort bei Strato, danach unter
+   **Deployments** einmal **Redeploy**, damit er gilt. Ein Push auf `main` tut es auch.
 2. Unter **Settings > Domains** die eigene Domain verbinden.
 3. Je eine Testbewerbung und eine Testanfrage abschicken: Beide müssen im Postfach ankommen,
    die Bestätigungen beim Absender. Kommt nichts an, steht der Grund in Vercel unter **Logs**
@@ -75,7 +75,7 @@ Wichtige Einstellungen oben in `build.py`:
 - `LIVE`: `False` ist der Testmodus. Suchmaschinen werden gebeten, nichts aufzunehmen (noindex),
   damit der Testlink nicht bei Google landet. Erst auf `True` setzen, wenn die Domain verbunden ist.
 - `INFO_MAIL`, `CAREER_MAIL`: E-Mail-Adressen
-- `SITE_URL`: Domain der fertigen Seite, z. B. `https://www.nexora.de`. Mit `LIVE = True` entstehen
+- `SITE_URL`: Domain der fertigen Seite, z. B. `https://www.infonexora.de`. Mit `LIVE = True` entstehen
   daraus Canonical-Links und `sitemap.xml`.
 - `ANTWORTZEIT`: was die Bestätigungsmail zum Kontaktformular verspricht
 - `WHATSAPP_NUMBER`, `WHATSAPP_TEXT`: WhatsApp Business
@@ -88,5 +88,5 @@ Wichtige Einstellungen oben in `build.py`:
 
 - Impressum und Datenschutzerklärung (gelb markierte Platzhalter)
 - Zahlen (14 Tage, 99,9 %, 4,9 von 5, PageSpeed) und die acht Beispiel-Kundenstimmen
-- E-Mail-Adressen, falls die Domain nicht `nexora.de` ist
+- Eigene Adresse für Bewerbungen (z. B. karriere@infonexora.de) in `CAREER_MAIL`, sobald sie bei Strato existiert
 - `LIVE = True` und `SITE_URL` setzen, dann neu bauen

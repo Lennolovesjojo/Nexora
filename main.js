@@ -208,6 +208,90 @@
     screen.style.transform = `rotateX(${(10 * (1 - p)).toFixed(2)}deg) scale(${(.96 + .04 * p).toFixed(3)})`;
   };
 
+  /* ---------- Hero: Beispielseite lädt, ein Besucher fragt einen Termin an ---------- */
+  // .is-live lädt die Inhalte (CSS), .is-lit schaltet das Licht an, sobald die Bühne gut zu sehen ist, .is-sent zeigt
+  // "Neue Anfrage". Ein Mauszeiger klickt in Schleife auf "Termin anfragen", aber nur, solange die Bühne sichtbar ist.
+  // Bei reduzierter Bewegung gilt sofort der Endzustand.
+  const stage = $(".stage");
+  if (stage && screen) {
+    const btn = $(".hs-main", stage), cur = $(".hs-cursor", stage), f1 = $(".f1", stage);
+    if (reduce || !btn || !cur || !f1 || !("IntersectionObserver" in window)) stage.classList.add("is-live", "is-lit", "is-sent");
+    else {
+      let live = false, started = false, lit = false, timer = 0, ready = 0, t0 = 0;
+      // Lage in .screen über offset*, denn .screen ist in 3D gekippt (getBoundingClientRect wäre verzerrt)
+      const pos = el => { let x = 0, y = 0; for (let n = el; n && n !== screen; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; } return [x, y]; };
+      const move = (x, y, jump) => {
+        if (jump) cur.style.transition = "none";
+        cur.style.transform = `translate(${Math.round(x)}px,${Math.round(y)}px)`;
+        if (jump) { cur.offsetWidth; cur.style.transition = ""; }
+      };
+      const run = (steps, i = 0) => {
+        if (i < steps.length) timer = setTimeout(() => { steps[i][1](); run(steps, i + 1); }, steps[i][0]);
+      };
+      // "Neue Anfrage": beim ersten Klick per CSS, danach blendet sie vor jedem Klick aus und mit dem Klick neu ein
+      let fa = null, shown = false;
+      const fx = (kf, ms) => {
+        if (!f1.animate) return;
+        if (fa) fa.cancel();
+        fa = f1.animate(kf, { duration: ms, easing: "cubic-bezier(.16,.84,.24,1)", fill: "forwards" });
+      };
+      const hide = () => {
+        if (!shown) return;
+        shown = false;
+        fx([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(-8px) scale(.98)" }], 450);
+      };
+      const send = () => {
+        if (stage.classList.contains("is-sent")) fx([{ opacity: 0, transform: "translateY(16px) scale(.96)" }, { opacity: 1, transform: "none" }], 900);
+        else stage.classList.add("is-sent");
+        shown = true;
+        f1.classList.remove("ping");
+        f1.offsetWidth;
+        f1.classList.add("ping");
+      };
+      const loop = () => {
+        const W = screen.offsetWidth, H = screen.offsetHeight, [bx, by] = pos(btn);
+        const x = bx + btn.offsetWidth * .62, y = by + btn.offsetHeight * .6;
+        run([
+          [0, () => move(W * .8, H + 24, true)],
+          [40, () => { cur.classList.add("on"); move(x, y); hide(); }],
+          [1250, () => { cur.classList.add("hand"); btn.classList.add("hover"); }],
+          [420, () => { cur.classList.add("click"); btn.classList.add("press"); }],
+          [150, () => { cur.classList.remove("click"); btn.classList.remove("press"); }],
+          [380, send],
+          [800, () => { cur.classList.remove("hand"); btn.classList.remove("hover"); move(W + 30, y + H * .2); }],
+          [1300, () => cur.classList.remove("on")],
+          [3400, loop],
+        ]);
+      };
+      const stop = () => {
+        clearTimeout(timer);
+        cur.classList.remove("on", "hand", "click");
+        btn.classList.remove("hover", "press");
+      };
+      const play = () => {
+        stop();
+        if (live && !document.hidden) timer = setTimeout(loop, Math.max(400, ready - performance.now()));
+      };
+      new IntersectionObserver(([e]) => {
+        const now = performance.now();
+        if (e.isIntersecting && !started) {
+          started = true;
+          t0 = Math.max(now, 1000); // nicht vor dem Einblenden der Bühne
+          setTimeout(() => stage.classList.add("is-live"), t0 - now);
+        }
+        live = e.intersectionRatio >= .35;
+        if (live && !lit) {
+          lit = true;
+          const at = Math.max(now + 150, t0 + 1100); // erst wenn die Inhalte stehen
+          setTimeout(() => stage.classList.add("is-lit"), at - now);
+          ready = at + 1300;
+        }
+        play();
+      }, { threshold: [0, .35] }).observe(stage);
+      document.addEventListener("visibilitychange", play);
+    }
+  }
+
   /* ---------- Ablauf: Linie füllt sich ---------- */
   const tl = $(".timeline");
   const fill = $(".timeline .fill");

@@ -428,6 +428,104 @@ def studio_card():
             '      </article>')
 
 # ================= Startseite =================
+# Hero-Bühne: Beispiel-Website eines Handwerksbetriebs im Browserfenster (reine Dekoration, aria-hidden).
+# Ablauf in main.js: Ladebalken, die Inhalte erscheinen, im Haus gehen die Lichter an, ein Besucher klickt
+# auf "Termin anfragen" und die Meldung "Neue Anfrage" erscheint. Gestaltung in styles.css (.hs-*).
+def _hs_svg(paths, cls="hs-i", box="0 0 24 24"):
+    return f'<svg class="{cls}" viewBox="{box}" focusable="false">{paths}</svg>'
+
+HS_STAR = '<path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>'
+HS_STARS = _hs_svg("".join(f'<g transform="translate({i * 24} 0)">{HS_STAR}</g>' for i in range(5)), "hs-stars", "0 0 120 24")
+HS_LOCK = _hs_svg('<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>', "lock")
+HS_MARK = _hs_svg('<path d="M4.5 11.2L12 5l7.5 6.2v8.3h-15z"/><path d="M10 19.5v-5h4v5"/>')
+HS_ARROW = _hs_svg('<path d="M5 12h13M13 7l5 5-5 5"/>')
+HS_SHIELD = _hs_svg('<path d="M12 3l7 3v5.5c0 4.2-3 7.9-7 9-4-1.1-7-4.8-7-9V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.4"/>')
+# Ring für PageSpeed 98: Umfang 2·π·15 = 94,25, davon 98 % gefüllt
+HS_RING = _hs_svg('<circle class="ps-t" cx="18" cy="18" r="15"/><circle class="ps-v" cx="18" cy="18" r="15"/>', "ps-ring", "0 0 36 36")
+# Mauszeiger: Pfeil und Hand, die Spitze liegt jeweils auf dem Ursprung von .hs-cursor (siehe CSS)
+HS_POINTER = _hs_svg('<path d="M2.5 2.2l14.6 10.4-6.5 1.3 3.8 7.4-2.9 1.4-3.8-7.4-5.2 4.6z"/>', "hs-pt", "0 0 20 24")
+HS_HAND = _hs_svg('<path d="M9.6 1.8c1.05 0 1.9.85 1.9 1.9v6.1c.3-.2.7-.3 1.1-.3 1 0 1.8.7 1.9 1.6.3-.2.7-.3 1.1-.3 1 0 1.8.8 1.9 1.7.3-.15.6-.2.9-.2 '
+                  '1 0 1.9.85 1.9 1.9v3.6c0 3.9-3 6.9-6.9 6.9h-1.1c-2.3 0-4.4-1.1-5.7-3L3.3 15.4c-.6-.85-.4-2 .45-2.6.85-.6 2-.4 2.6.45l1.35 1.9V3.7'
+                  'c0-1.05.85-1.9 1.9-1.9z"/><path class="hs-f" d="M11.5 9.8v3.6M14.5 11.1v2.7M17.5 12.5v2.2"/>', "hs-hand", "0 0 24 26")
+HS_HOUSE = (
+    '<svg class="hs-art" viewBox="0 0 480 340" preserveAspectRatio="xMidYMid slice" focusable="false"><defs>'
+    '<linearGradient id="hs-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4B3BC8"/><stop offset=".42" stop-color="#8E89F3"/>'
+    '<stop offset=".72" stop-color="#D8D0FF"/><stop offset="1" stop-color="#FFDCC6"/></linearGradient>'
+    '<radialGradient id="hs-sun"><stop offset="0" stop-color="#FFF5DF"/><stop offset=".3" stop-color="#FFDDB0" stop-opacity=".85"/>'
+    '<stop offset="1" stop-color="#FFDDB0" stop-opacity="0"/></radialGradient>'
+    '<linearGradient id="hs-win" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1C9"/><stop offset="1" stop-color="#FFB25A"/></linearGradient>'
+    '<radialGradient id="hs-spill"><stop offset="0" stop-color="#FFC66F" stop-opacity=".55"/><stop offset="1" stop-color="#FFC66F" stop-opacity="0"/></radialGradient>'
+    '<pattern id="hs-wood" width="8" height="10" patternUnits="userSpaceOnUse"><rect width="8" height="10" fill="#8E5834"/><rect width="1.3" height="10" fill="#6C4022"/></pattern>'
+    '</defs>'
+    '<rect width="480" height="340" fill="url(#hs-sky)"/>'
+    # Sterne und Wolken
+    '<g fill="#fff"><circle cx="46" cy="34" r="1.3" opacity=".8"/><circle cx="120" cy="58" r="1" opacity=".6"/><circle cx="182" cy="26" r="1.2" opacity=".7"/>'
+    '<circle cx="262" cy="48" r="1" opacity=".6"/><circle cx="338" cy="22" r="1.3" opacity=".8"/><circle cx="446" cy="44" r="1" opacity=".6"/></g>'
+    '<g fill="#fff" opacity=".22"><ellipse cx="96" cy="104" rx="40" ry="8"/><ellipse cx="110" cy="96" rx="20" ry="10"/><ellipse cx="84" cy="99" rx="13" ry="7"/>'
+    '<ellipse cx="330" cy="84" rx="30" ry="6"/><ellipse cx="342" cy="78" rx="14" ry="7"/></g>'
+    # tief stehende Sonne, Hügel, Boden
+    '<circle cx="402" cy="186" r="92" fill="url(#hs-sun)"/><circle cx="402" cy="186" r="21" fill="#FFF2D6"/>'
+    '<path d="M0 226C64 204 132 214 200 206s150-20 280 2v132H0z" fill="#A99EF2" opacity=".75"/>'
+    '<path d="M0 250c84-18 170-10 250-16s156-4 230 10v96H0z" fill="#7C6CD8" opacity=".85"/>'
+    '<rect y="262" width="480" height="78" fill="#2A2160"/>'
+    '<ellipse class="hs-glow" cx="228" cy="268" rx="170" ry="30" fill="url(#hs-spill)"/>'
+    # Baum links
+    '<rect x="76" y="212" width="6" height="52" rx="2" fill="#17112F"/>'
+    '<circle cx="79" cy="194" r="30" fill="#3B2F80"/><circle cx="98" cy="213" r="19" fill="#4A3D99"/><circle cx="60" cy="213" r="17" fill="#33296F"/>'
+    # Haus mit Satteldach und Anbau in Holz
+    '<path d="M128 264V158l88-54 88 54v106z" fill="#1F1942"/>'
+    '<path d="M112 166L216 101l104 65" fill="none" stroke="#0F0C22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>'
+    '<rect x="300" y="192" width="96" height="72" fill="url(#hs-wood)"/>'
+    '<rect x="294" y="184" width="108" height="9" rx="1.5" fill="#0F0C22"/>'
+    '<g fill="#2E2858"><rect x="146" y="174" width="66" height="62" rx="2"/><rect x="226" y="174" width="62" height="26" rx="2"/>'
+    '<rect x="316" y="206" width="64" height="38" rx="2"/><circle cx="216" cy="134" r="11"/></g>'
+    '<g fill="url(#hs-win)"><rect class="hs-w w1" x="146" y="174" width="66" height="62" rx="2"/><rect class="hs-w w2" x="226" y="174" width="62" height="26" rx="2"/>'
+    '<rect class="hs-w w3" x="316" y="206" width="64" height="38" rx="2"/><circle class="hs-w w4" cx="216" cy="134" r="11"/></g>'
+    '<path d="M179 174v62M146 205h66M257 174v26M348 206v38" stroke="#0F0C22" stroke-width="3"/>'
+    '<rect x="236" y="212" width="30" height="52" rx="2" fill="#0F0C22"/><circle cx="259" cy="239" r="1.8" fill="#FFC66F"/>'
+    '<path d="M238 264h26l32 76h-90z" fill="#3A3079"/>'
+    '<g fill="#FFD48F"><circle cx="214" cy="300" r="2.4"/><circle cx="292" cy="300" r="2.4"/></g>'
+    '<ellipse cx="420" cy="262" rx="30" ry="14" fill="#3B2F80"/><ellipse cx="447" cy="266" rx="18" ry="10" fill="#4A3D99"/>'
+    '</svg>'
+)
+HS_CARDS = [
+    ('<rect x="4" y="3.5" width="13" height="5.5" rx="1.5"/><path d="M17 6.2h2.5v5.3h-8.3v3"/><rect x="9.7" y="14.5" width="3" height="6.5" rx="1"/>',
+     "Sanierung", "Bad, Küche, Fenster"),
+    ('<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>', "Planung", "3D-Entwurf inklusive"),
+    ('<path d="M6.8 3.5h2.6l1.4 4-2.1 1.4a11.5 11.5 0 0 0 6.4 6.4l1.4-2.1 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.8 5.7a2 2 0 0 1 2-2.2z"/>',
+     "Notdienst", "24/7 erreichbar"),
+]
+hs_cards = "".join(f'<span class="hs-card"><span class="hs-ic">{_hs_svg(ic)}</span><span><b>{t}</b><small>{d}</small></span></span>'
+                   for ic, t, d in HS_CARDS)
+HERO_STAGE = f'''<div class="stage fade-up d3" aria-hidden="true">
+      <div class="screen">
+        <div class="screen-bar"><i></i><i></i><i></i><span class="screen-url">{HS_LOCK}<span>ihre-firma.de</span></span><span class="screen-load"></span></div>
+        <div class="hs">
+          <div class="hs-nav">
+            <span class="hs-logo"><span class="hs-mark">{HS_MARK}</span>Ihre Firma</span>
+            <span class="hs-links"><span>Leistungen</span><span>Projekte</span><span>Über uns</span><span>Kontakt</span></span>
+            <span class="hs-cta">Angebot anfragen</span>
+            <span class="hs-burger"></span>
+          </div>
+          <div class="hs-hero">
+            <div class="hs-copy">
+              <span class="hs-kick">Meisterbetrieb seit 2009</span>
+              <div class="mock-h">Ihr Handwerk.<br>Online sichtbar.</div>
+              <p class="mock-p">Moderne Website, schnell geladen und bei Google gut gefunden.</p>
+              <div class="hs-btns"><span class="hs-btn hs-main">Termin anfragen{HS_ARROW}</span><span class="hs-btn">Leistungen</span></div>
+              <div class="hs-trust">{HS_STARS}<span>Top bewertet auf Google</span></div>
+            </div>
+            <div class="hs-visual">{HS_HOUSE}<span class="hs-tag"><b>Neubau Einfamilienhaus</b><small>Referenzprojekt</small></span><span class="hs-dots"><i></i><i></i><i></i></span></div>
+          </div>
+          <div class="hs-cards">{hs_cards}</div>
+        </div>
+        <span class="hs-cursor">{HS_POINTER}{HS_HAND}</span>
+      </div>
+      <div class="float f1" data-depth="18"><span class="ic">+1</span><span><b>Neue Anfrage</b><small>über das Kontaktformular</small></span></div>
+      <div class="float f2" data-depth="-14"><span class="ic ok">{HS_SHIELD}</span><span><b>SSL &amp; Backup aktiv</b><small>täglich, automatisch</small></span></div>
+      <div class="float f3" data-depth="10"><span class="ic ps">{HS_RING}<i>98</i></span><span><b>PageSpeed 98/100</b><small>mobil gemessen</small></span></div>
+    </div>'''
+
 SECTORS = ["Handwerk", "Gastronomie", "Arztpraxen", "Kanzleien", "Immobilien", "Einzelhandel", "Fitness", "Beauty", "Logistik", "Beratung", "Hotels", "Vereine"]
 marquee = "".join(f"<span>{s}</span>" for s in SECTORS) * 2
 
@@ -445,23 +543,7 @@ index_body = f'''<section class="hero">
       <a class="btn btn--grad magnetic" href="termin.html">Kostenlose Beratung buchen {ARR}</a>
       <a class="btn btn--ghost" href="leistungen.html">Leistungen &amp; Preise</a>
     </div>
-    <div class="stage fade-up d3" aria-hidden="true">
-      <div class="screen">
-        <div class="screen-bar"><i></i><i></i><i></i><span class="screen-url">https://ihre-firma.de</span></div>
-        <div class="screen-body">
-          <div>
-            <div class="mock-h">Ihr Handwerk.<br>Online sichtbar.</div>
-            <p class="mock-p">Moderne Website, schnell geladen und bei Google gut gefunden.</p>
-            <div class="mock-btns"><span></span><span></span></div>
-          </div>
-          <div class="mock-visual"></div>
-          <div class="mock-row"><span></span><span></span><span></span></div>
-        </div>
-      </div>
-      <div class="float f1" data-depth="18"><span class="ic">+1</span><span><b>Neue Anfrage</b><small>über das Kontaktformular</small></span></div>
-      <div class="float f2" data-depth="-14"><span class="ic ok">✓</span><span><b>SSL &amp; Backup aktiv</b><small>täglich, automatisch</small></span></div>
-      <div class="float f3" data-depth="10"><span class="ic">98</span><span><b>PageSpeed 98/100</b><small>mobil gemessen</small></span></div>
-    </div>
+    {HERO_STAGE}
   </div>
 </section>
 

@@ -51,5 +51,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.nexora-webstudio.dev"
+        }
+      ],
+      "destination": "https://nexora-webstudio.dev/:path*",
+      "permanent": true
+    }
   ]
 }

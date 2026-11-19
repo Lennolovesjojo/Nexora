@@ -16,7 +16,7 @@ const EMPFAENGER = process.env.MAIL_TO || "info@infonexora.de";
 const ABSENDER_NAME = "Nexora Website";
 const BESTAETIGUNG = true;        // Eingangsbestätigung an die anfragende Person
 const ANTWORTZEIT = "in der Regel innerhalb eines Werktags";
-const WEBSITE = "";   // für den Terminlink in der Bestätigung (leer = ohne Link)
+const WEBSITE = "https://nexora-webstudio.dev";   // für den Terminlink in der Bestätigung (leer = ohne Link)
 const MAX_PRO_STUNDE = 5;         // Schutz vor Missbrauch: Anfragen pro Anschluss und Stunde
 const SEITE = "/kontakt.html";    // Rückkehr, wenn das Formular ohne JavaScript abgeschickt wurde
 // =================================================

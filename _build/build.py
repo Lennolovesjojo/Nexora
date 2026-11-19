@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Baut die Nexora-Seiten aus gemeinsamen Bausteinen (Header, Footer, Statistik)."""
 import pathlib, sys, re, json, hashlib, base64, unicodedata, html as _html
+from urllib.parse import urlsplit
 
 # Ausgabeordner: erstes Argument, sonst der Ordner über _build/ (also die Website selbst)
 OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else pathlib.Path(__file__).resolve().parent.parent
@@ -23,7 +24,9 @@ CAREER_MAIL = "info@infonexora.de"    # Bewerbungen (auch als Ausweichadresse an
 
 # Adresse der fertigen Website, z. B. "https://www.nexora.de" (ohne / am Ende).
 # Leer lassen, solange die Domain nicht feststeht. Gesetzt entstehen daraus Canonical-Links, sitemap.xml und absolute Vorschaubild-Links.
-SITE_URL = ""
+# Die jeweils andere Schreibweise (mit oder ohne www) leitet Vercel per vercel.json hierher um.
+# nexora-webstudio.dev: bei Vercel gekauft und mit dem Projekt verbunden (Lennos Wahl vom 19.11.2026)
+SITE_URL = "https://nexora-webstudio.dev"
 
 # Testmodus: Solange LIVE = False ist, nehmen Suchmaschinen die Seite nicht auf (noindex), z. B. den Testlink von Vercel.
 # Erst auf True setzen, wenn Domain, Impressum, Datenschutz und echte Inhalte stehen.
@@ -1174,6 +1177,12 @@ if FONT_MODE == "local" and FORM_BACKEND == "vercel":
             {"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800"}]},
         ],
     }
+    # Eine Adresse für alle: www.<domain> leitet auf <domain> um (oder umgekehrt, je nach SITE_URL)
+    site_host = urlsplit(SITE_URL).hostname or "" if SITE_URL else ""
+    other_host = (site_host[4:] if site_host.startswith("www.") else "www." + site_host) if site_host else ""
+    if other_host:
+        vercel["redirects"] = [{"source": "/:path*", "has": [{"type": "host", "value": other_host}],
+                                "destination": SITE_URL + "/:path*", "permanent": True}]
     (OUT / "vercel.json").write_text(json.dumps(vercel, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     pkg = {
         "name": "nexora-website",

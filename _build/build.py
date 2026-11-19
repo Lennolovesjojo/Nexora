@@ -41,9 +41,9 @@ HRB = ""                # z. B. "HRB 123456 B"
 UST_ID = ""             # z. B. "DE123456789", leer lassen, falls es keine gibt (dann entfällt die Zeile nach dem Ausfüllen)
 UST_ID_OFFEN = True     # True, solange noch nicht geklärt ist, ob es eine USt-IdNr. gibt
 
-# Beispielinhalte: True zeigt die Beispiel-Kundenstimmen und die noch unbelegten Zahlen (14 Tage, 99,9 %, 4,9/5).
-# False blendet die Kundenstimmen aus und zeigt im Zahlenbereich stattdessen feste Angebotsdaten.
-BEISPIELE = False   # seit 19.11.2026 ausgeblendet (Lennos Wahl beim Livegang)
+# Beispielinhalte: True zeigt die erfundenen Beispiel-Kundenstimmen und die Beispielbewertung 4,9/5 (nur zum Testen).
+# Live bleiben sie aus: erfundene Kundenbewertungen sind nach UWG verboten. Echte Stimmen in REVIEWS eintragen, dann einschalten.
+BEISPIELE = False
 
 # Testmodus: Solange LIVE = False ist, nehmen Suchmaschinen die Seite nicht auf (noindex), z. B. den Testlink von Vercel.
 # LIVE = True: für Google freigegeben, mit Canonical-Links, sitemap.xml und Sitemap-Zeile in robots.txt (seit 19.11.2026).
@@ -176,23 +176,17 @@ FOOTER = f'''<footer class="site-foot">
 '''
 
 # Platzhalter-Zahlen außer "1.000+ Kunden": vor Livegang durch echte Werte ersetzen.
-if BEISPIELE:
-    STAT_LEDE = "Hinter jeder Zahl steht ein Unternehmen, das heute mit seiner Website mehr erreicht als vorher."
-    STAT_TILES = (
-        '<div class="stat" data-obs><div class="stat-num"><span data-count="14">14</span><span class="u"> Tage</span></div><p>im Schnitt vom Erstgespräch bis zum Livegang</p><div class="bar"><i style="--w:62%"></i></div></div>\n'
-        '      <div class="stat" data-obs><div class="stat-num"><span data-count="99.9" data-decimals="1" data-from="90">99,9</span><span class="u"> %</span></div><p>Verfügbarkeit unserer Server im Jahresmittel</p><div class="bar"><i style="--w:99.9%"></i></div></div>\n'
-        '      <div class="stat" data-obs><div class="stat-num"><span data-count="4.9" data-decimals="1">4,9</span><span class="u">/5</span></div><p>durchschnittliche Bewertung unserer Kunden</p><div class="bar"><i style="--w:98%"></i></div></div>')
-else:
-    # feste Angebotsdaten statt unbelegter Werte
-    STAT_LEDE = "Klare Preise, schnelle Antworten und feste Ansprechpersonen, die Ihre Website betreuen."
-    STAT_TILES = (
-        '<div class="stat" data-obs><div class="stat-num"><span class="u">ab </span><span data-count="150">150</span><span class="u"> €</span></div><p>im Monat für Ihre Website zur Miete, inkl.&nbsp;Hosting, zzgl.&nbsp;MwSt.</p><div class="bar"><i style="--w:60%"></i></div></div>\n'
-        '      <div class="stat" data-obs><div class="stat-num"><span data-count="30">30</span><span class="u"> Min.</span></div><p>kostenlose und unverbindliche Erstberatung</p><div class="bar"><i style="--w:50%"></i></div></div>\n'
-        '      <div class="stat" data-obs><div class="stat-num"><span>1</span><span class="u"> Werktag</span></div><p>in der Regel bis zur Antwort auf Ihre Anfrage</p><div class="bar"><i style="--w:85%"></i></div></div>')
-
-STATS_CLS = "" if BEISPIELE else " stats--lang"   # längere Einheiten (ab 150 €, 1 Werktag): Schrift auf großen Bildschirmen etwas kleiner
+# Zahlenbereich: 14 Tage und 99,9 % wie gestaltet (Lennos Wunsch, 19.11.2026). Die Bewertung 4,9/5 ist ein erfundener
+# Beispielwert und erscheint nur mit BEISPIELE = True; sonst steht dort die kostenlose Erstberatung.
+STAT_LEDE = "Hinter jeder Zahl steht ein Unternehmen, das heute mit seiner Website mehr erreicht als vorher."
+_T14 = '<div class="stat" data-obs><div class="stat-num"><span data-count="14">14</span><span class="u"> Tage</span></div><p>im Schnitt vom Erstgespräch bis zum Livegang</p><div class="bar"><i style="--w:62%"></i></div></div>'
+_T999 = '<div class="stat" data-obs><div class="stat-num"><span data-count="99.9" data-decimals="1" data-from="90">99,9</span><span class="u"> %</span></div><p>Verfügbarkeit unserer Server im Jahresmittel</p><div class="bar"><i style="--w:99.9%"></i></div></div>'
+_T49 = '<div class="stat" data-obs><div class="stat-num"><span data-count="4.9" data-decimals="1">4,9</span><span class="u">/5</span></div><p>durchschnittliche Bewertung unserer Kunden</p><div class="bar"><i style="--w:98%"></i></div></div>'
+_T30 = '<div class="stat" data-obs><div class="stat-num"><span data-count="30">30</span><span class="u"> Min.</span></div><p>kostenlose und unverbindliche Erstberatung</p><div class="bar"><i style="--w:50%"></i></div></div>'
+STAT_TILES = _T14 + "\n      " + _T999 + "\n      " + (_T49 if BEISPIELE else _T30)
+STATS_CLS = ""   # " stats--lang" verkleinert die Zahlen auf großen Bildschirmen für lange Einheiten (z. B. "ab 150 €")
 STAT_HINWEIS = '<!-- Hinweis: Werte außer "1.000+ Kunden" sind Platzhalter und müssen vor dem Livegang geprüft werden. -->' if BEISPIELE else ""
-UPTIME_ROW = "<span>letzte 30 Tage</span><span>99,9 % online</span>" if BEISPIELE else "<span>SSL · Backup · Monitoring</span><span>inklusive</span>"
+UPTIME_ROW = "<span>letzte 30 Tage</span><span>99,9 % online</span>"
 # Performance-Anzeigen (Hero-Badge und Leistungskarte): Lenno will sie wie gestaltet, PageSpeed 98 mobil (19.11.2026).
 # PAGESPEED_MESSWERTE = True zeigt stattdessen die gemessenen Lighthouse-Werte dieser Website am Desktop (100, LCP 0,5 s, CLS 0, TBT 0 ms).
 PAGESPEED_MESSWERTE = False

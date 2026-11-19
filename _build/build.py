@@ -899,7 +899,7 @@ career_body = f'''<section class="page-hero">
 
 # ================= Termin =================
 CALENDLY = "https://calendly.com/linus-bbgnet/30min"   # Link zum Buchungskalender
-CALENDLY_CONSENT = True   # True = Kalender erst nach Klick auf "Kalender anzeigen" laden (datensparsamer), False = sofort laden
+CALENDLY_CONSENT = False  # Lennos Wahl vom 17.11.2026: sofort laden. True = Kalender erst nach Klick auf "Kalender anzeigen" laden (datensparsamer), False = sofort laden
 termin_body = f'''<section class="page-hero" style="padding-bottom:clamp(64px,8vw,120px)">
   <div class="wrap book">
     <div class="book-side book-intro">

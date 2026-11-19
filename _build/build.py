@@ -28,6 +28,18 @@ CAREER_MAIL = "info@infonexora.de"    # Bewerbungen (auch als Ausweichadresse an
 # nexora-webstudio.dev: bei Vercel gekauft und mit dem Projekt verbunden (Lennos Wahl vom 19.11.2026)
 SITE_URL = "https://nexora-webstudio.dev"
 
+# Firmendaten für Impressum und Datenschutz. Leere Felder erscheinen als markierter Platzhalter.
+# Nexora ist ein Angebot der Baldwin Bell Green GmbH (Lenno, 19.11.2026).
+FIRMA = "Baldwin Bell Green GmbH"
+GESCHAEFTSFUEHRER = "Linus Schoeller"
+STRASSE = ""            # z. B. "Musterstraße 1"
+PLZ_ORT = ""            # z. B. "10115 Berlin"
+TELEFON = ""            # z. B. "+49 172 4358302"
+REGISTERGERICHT = ""    # z. B. "Amtsgericht Berlin (Charlottenburg)"
+HRB = ""                # z. B. "HRB 123456 B"
+UST_ID = ""             # z. B. "DE123456789", leer lassen, falls es keine gibt (dann entfällt die Zeile nach dem Ausfüllen)
+UST_ID_OFFEN = True     # True, solange noch nicht geklärt ist, ob es eine USt-IdNr. gibt
+
 # Testmodus: Solange LIVE = False ist, nehmen Suchmaschinen die Seite nicht auf (noindex), z. B. den Testlink von Vercel.
 # Erst auf True setzen, wenn Domain, Impressum, Datenschutz und echte Inhalte stehen.
 LIVE = False
@@ -1067,6 +1079,19 @@ for _name, _to in (("bewerbung", CAREER_MAIL), ("anfrage", INFO_MAIL)):
 def ph(t):
     return f'<span class="ph">{t}</span>'
 
+def wert(v, platzhalter):
+    return _html.escape(v) if v else ph(platzhalter)
+
+IMPRESSUM_OFFEN = not all([STRASSE, PLZ_ORT, TELEFON, REGISTERGERICHT, HRB]) or (UST_ID_OFFEN and not UST_ID)
+IMP_NOTE = ('<p class="legal-note">Vorlage: Die markierten Felder müssen vor dem Livegang mit den echten Firmendaten ausgefüllt werden.</p>'
+            if IMPRESSUM_OFFEN else "")
+if UST_ID:
+    IMP_UST = f'<section><h2>Umsatzsteuer-ID</h2><p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {_html.escape(UST_ID)}</p></section>'
+elif UST_ID_OFFEN:
+    IMP_UST = f'<section><h2>Umsatzsteuer-ID</h2><p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {ph("USt-IdNr.")}</p></section>'
+else:
+    IMP_UST = ""
+
 CAL_DS = ("Der Kalender wird erst geladen, wenn Sie auf der Seite „Beratungstermin“ auf „Kalender anzeigen“ klicken. Erst dann werden Daten wie Ihre IP-Adresse an Calendly übertragen."
           if CALENDLY_CONSENT else "Der Kalender ist auf der Seite „Beratungstermin“ eingebunden und wird beim Aufruf dieser Seite direkt von Calendly geladen. Dabei werden Daten wie Ihre IP-Adresse an Calendly übertragen, und Calendly kann Cookies setzen.")
 COOKIE_DS = ("Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur Calendly setzen, und zwar erst, wenn Sie den Kalender laden (siehe Abschnitt 6)."
@@ -1082,14 +1107,14 @@ impressum_body = f'''<section class="page-hero">
 </section>
 <section class="section" style="padding-top:0">
   <div class="wrap"><div class="legal">
-    <!-- VORLAGE: Alle markierten Felder ausfüllen und vor Veröffentlichung rechtlich prüfen lassen. -->
-    <p class="legal-note">Vorlage: Die markierten Felder müssen vor dem Livegang mit den echten Firmendaten ausgefüllt werden.</p>
-    <section><h2>Angaben gemäß § 5 DDG</h2><p>{ph("Firmenname und Rechtsform")}<br>{ph("Straße und Hausnummer")}<br>{ph("PLZ und Ort")}</p></section>
-    <section><h2>Vertreten durch</h2><p>{ph("Name der Geschäftsführung")}</p></section>
-    <section><h2>Kontakt</h2><p>Telefon: {ph("Telefonnummer")}<br>E-Mail: <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a></p></section>
-    <section><h2>Registereintrag</h2><p>Registergericht: {ph("Amtsgericht")}<br>Registernummer: {ph("HRB-Nummer")}</p></section>
-    <section><h2>Umsatzsteuer-ID</h2><p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {ph("USt-IdNr.")}</p></section>
-    <section><h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2><p>{ph("Name und Anschrift")}</p></section>
+    <!-- Firmendaten oben in build.py (FIRMA, GESCHAEFTSFUEHRER, STRASSE ...). Vor Veröffentlichung rechtlich prüfen lassen. -->
+    {IMP_NOTE}
+    <section><h2>Angaben gemäß § 5 DDG</h2><p>{wert(FIRMA, "Firmenname und Rechtsform")}<br>{wert(STRASSE, "Straße und Hausnummer")}<br>{wert(PLZ_ORT, "PLZ und Ort")}</p><p>Nexora ist ein Angebot der {wert(FIRMA, "Firmenname")}.</p></section>
+    <section><h2>Vertreten durch</h2><p>Geschäftsführer: {wert(GESCHAEFTSFUEHRER, "Name der Geschäftsführung")}</p></section>
+    <section><h2>Kontakt</h2><p>Telefon: {wert(TELEFON, "Telefonnummer")}<br>E-Mail: <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a></p></section>
+    <section><h2>Registereintrag</h2><p>Eintragung im Handelsregister<br>Registergericht: {wert(REGISTERGERICHT, "Amtsgericht")}<br>Registernummer: {wert(HRB, "HRB-Nummer")}</p></section>
+    {IMP_UST}
+    <section><h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2><p>{wert(GESCHAEFTSFUEHRER, "Name")}<br>{wert(STRASSE, "Straße und Hausnummer")}<br>{wert(PLZ_ORT, "PLZ und Ort")}</p></section>
   </div></div>
 </section>
 '''
@@ -1104,7 +1129,7 @@ datenschutz_body = f'''<section class="page-hero">
   <div class="wrap"><div class="legal">
     <!-- VORLAGE: Gliederung für die Datenschutzerklärung. Den vollständigen Text bitte mit einem Generator oder einer Fachperson erstellen. -->
     <p class="legal-note">Vorlage: Diese Gliederung zeigt, welche Punkte die Datenschutzerklärung für diese Website abdecken muss. Der vollständige Text wird noch ergänzt.</p>
-    <section><h2>1. Verantwortliche Stelle</h2><p>{ph("Firmenname, Anschrift, E-Mail")}</p></section>
+    <section><h2>1. Verantwortliche Stelle</h2><p>{wert(FIRMA, "Firmenname")}<br>{wert(STRASSE, "Straße und Hausnummer")}<br>{wert(PLZ_ORT, "PLZ und Ort")}<br>Vertreten durch den Geschäftsführer {wert(GESCHAEFTSFUEHRER, "Name")}<br>E-Mail: <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a></p></section>
     <section><h2>2. Hosting</h2><p>Diese Website wird bei {ph("Hosting-Anbieter, z. B. Vercel Inc. (USA), mit Auftragsverarbeitungsvertrag")} betrieben. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse und Zeitpunkt in Server-Logfiles verarbeitet. {FORM_DS}</p></section>
     <section id="anfrage"><h2>3. Kontaktformular und E-Mail</h2><p>Wenn Sie uns über das Kontaktformular oder per E-Mail schreiben, verarbeiten wir Ihre Angaben zur Bearbeitung Ihrer Anfrage. Formularangaben werden per E-Mail an uns übermittelt und nicht auf dem Webserver gespeichert. Sie erhalten automatisch eine Eingangsbestätigung. {ph("Rechtsgrundlage und Speicherdauer ergänzen")}</p></section>
     <section><h2>4. Kontakt per WhatsApp</h2><p>Über den WhatsApp-Button können Sie uns direkt schreiben. Die Verbindung zu WhatsApp entsteht erst, wenn Sie den Button anklicken. {ph("Details zu Anbieter (WhatsApp Ireland Ltd. / Meta), Datenübermittlung und Rechtsgrundlage ergänzen")}</p></section>
@@ -1117,7 +1142,7 @@ datenschutz_body = f'''<section class="page-hero">
 </section>
 '''
 
-page("impressum.html", "Impressum · Nexora", "Impressum der Nexora Webagentur.", "", impressum_body)
+page("impressum.html", "Impressum · Nexora", f"Impressum der Nexora Webagentur, ein Angebot der {FIRMA}.", "", impressum_body)
 page("datenschutz.html", "Datenschutz · Nexora", "Datenschutzerklärung der Nexora Webagentur.", "", datenschutz_body)
 print("built", FONT_MODE, sorted(p.name for p in OUT.glob("*.html")))
 

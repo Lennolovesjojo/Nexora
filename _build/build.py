@@ -193,8 +193,10 @@ else:
 STATS_CLS = "" if BEISPIELE else " stats--lang"   # längere Einheiten (ab 150 €, 1 Werktag): Schrift auf großen Bildschirmen etwas kleiner
 STAT_HINWEIS = '<!-- Hinweis: Werte außer "1.000+ Kunden" sind Platzhalter und müssen vor dem Livegang geprüft werden. -->' if BEISPIELE else ""
 UPTIME_ROW = "<span>letzte 30 Tage</span><span>99,9 % online</span>" if BEISPIELE else "<span>SSL · Backup · Monitoring</span><span>inklusive</span>"
-# Performance-Anzeigen: ohne Beispiele die gemessenen Lighthouse-Werte dieser Website am Desktop (19.11.2026: 100, LCP 0,5 s, CLS 0, TBT 0 ms)
-if BEISPIELE:
+# Performance-Anzeigen (Hero-Badge und Leistungskarte): Lenno will sie wie gestaltet, PageSpeed 98 mobil (19.11.2026).
+# PAGESPEED_MESSWERTE = True zeigt stattdessen die gemessenen Lighthouse-Werte dieser Website am Desktop (100, LCP 0,5 s, CLS 0, TBT 0 ms).
+PAGESPEED_MESSWERTE = False
+if not PAGESPEED_MESSWERTE:
     PS_WERT, PS_ART, PS_STYLE, PS_VITALS, PS_SATZ = "98", "mobil", "", ("1,1 s", "0,01", "30 ms"), ""
 else:
     PS_WERT, PS_ART, PS_STYLE, PS_VITALS, PS_SATZ = "100", "Desktop", ' style="--ps-off:0;--g-off:0"', ("0,5 s", "0,00", "0 ms"), " So schnell lädt diese Website."

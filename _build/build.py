@@ -30,9 +30,10 @@ SITE_URL = "https://nexora-webstudio.dev"
 
 # Firmendaten für Impressum und Datenschutz. Leere Felder erscheinen im Testmodus als markierter Platzhalter
 # und werden live einfach weggelassen (Lenno, 19.11.2026: Adresse, HRB und USt-IdNr. vorerst weglassen).
-# Nexora ist ein Angebot der Baldwin Bell Green GmbH (Lenno, 19.11.2026).
-FIRMA = "Baldwin Bell Green GmbH"
-GESCHAEFTSFUEHRER = "Linus Schoeller"
+# FIRMA: Firmenname mit Rechtsform. Vorerst leer (Lenno, 19.11.2026: Firmenname raus, neue Daten folgen);
+# leer erscheint Linus Schoeller selbst als Anbieter von Nexora, ohne "Vertreten durch".
+FIRMA = ""
+GESCHAEFTSFUEHRER = "Linus Schoeller"   # mit FIRMA die Geschäftsführung, ohne FIRMA der Anbieter selbst
 STRASSE = ""            # z. B. "Musterstraße 1"
 PLZ_ORT = ""            # z. B. "10115 Berlin"
 TELEFON = ""            # z. B. "+49 172 4358302"
@@ -1141,14 +1142,24 @@ DS_NOTE = ('<p class="legal-note">Die markierten Felder werden noch ergänzt.</p
 
 _tel, _rg, _hrb = wert(TELEFON, "Telefonnummer"), wert(REGISTERGERICHT, "Amtsgericht"), wert(HRB, "HRB-Nummer")
 _mail = f'<a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a>'
-IMP_ADRESSE = zeilen(wert(FIRMA, "Firmenname und Rechtsform"), wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"))
+_ort = (wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"))
+if FIRMA:
+    IMP_ADRESSE = zeilen(_html.escape(FIRMA), *_ort)
+    IMP_ANGEBOT = f"<p>Nexora ist ein Angebot der {_html.escape(FIRMA)}.</p>"
+    IMP_VERTRETEN = f'<section><h2>Vertreten durch</h2><p>Geschäftsführer: {wert(GESCHAEFTSFUEHRER, "Name der Geschäftsführung")}</p></section>'
+    IMP_META = f"Impressum der Nexora Webagentur, ein Angebot der {FIRMA}."
+else:
+    # ohne Firma ist die Person selbst der Anbieter, Nexora steht als Name des Angebots darunter
+    IMP_ADRESSE = zeilen(wert(GESCHAEFTSFUEHRER, "Name"), "Nexora", *_ort)
+    IMP_ANGEBOT = IMP_VERTRETEN = ""
+    IMP_META = "Impressum der Nexora Webagentur."
 IMP_KONTAKT = zeilen("Telefon: " + _tel if _tel else "", "E-Mail: " + _mail,
                      f'WhatsApp: <a {WA_ATTRS}>{WHATSAPP_ANZEIGE}</a>' if WHATSAPP_NUMBER else "")
 IMP_REGISTER = ('<section><h2>Registereintrag</h2><p>' + zeilen("Eintragung im Handelsregister", "Registergericht: " + _rg if _rg else "",
                 "Registernummer: " + _hrb if _hrb else "") + '</p></section>') if (_rg or _hrb) else ""
 IMP_MSTV = zeilen(wert(GESCHAEFTSFUEHRER, "Name"), wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"))
-DS_VERANTWORTLICH = zeilen(wert(FIRMA, "Firmenname"), wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"),
-                           "Vertreten durch den Geschäftsführer " + wert(GESCHAEFTSFUEHRER, "Name"), "E-Mail: " + _mail)
+DS_VERANTWORTLICH = (zeilen(_html.escape(FIRMA), *_ort, "Vertreten durch den Geschäftsführer " + wert(GESCHAEFTSFUEHRER, "Name"), "E-Mail: " + _mail)
+                     if FIRMA else zeilen(wert(GESCHAEFTSFUEHRER, "Name"), "Nexora", *_ort, "E-Mail: " + _mail))
 
 impressum_body = f'''<section class="page-hero">
   <div class="wrap">
@@ -1160,8 +1171,8 @@ impressum_body = f'''<section class="page-hero">
   <div class="wrap"><div class="legal">
     <!-- Firmendaten oben in build.py (FIRMA, GESCHAEFTSFUEHRER, STRASSE ...). Vor Veröffentlichung rechtlich prüfen lassen. -->
     {IMP_NOTE}
-    <section><h2>Angaben gemäß § 5 DDG</h2><p>{IMP_ADRESSE}</p><p>Nexora ist ein Angebot der {wert(FIRMA, "Firmenname")}.</p></section>
-    <section><h2>Vertreten durch</h2><p>Geschäftsführer: {wert(GESCHAEFTSFUEHRER, "Name der Geschäftsführung")}</p></section>
+    <section><h2>Angaben gemäß § 5 DDG</h2><p>{IMP_ADRESSE}</p>{IMP_ANGEBOT}</section>
+    {IMP_VERTRETEN}
     <section><h2>Kontakt</h2><p>{IMP_KONTAKT}</p></section>
     {IMP_REGISTER}
     {IMP_UST}
@@ -1195,7 +1206,7 @@ datenschutz_body = f'''<section class="page-hero">
 </section>
 '''
 
-page("impressum.html", "Impressum · Nexora", f"Impressum der Nexora Webagentur, ein Angebot der {FIRMA}.", "", impressum_body)
+page("impressum.html", "Impressum · Nexora", IMP_META, "", impressum_body)
 page("datenschutz.html", "Datenschutz · Nexora", "Datenschutzerklärung der Nexora Webagentur.", "", datenschutz_body)
 print("built", FONT_MODE, sorted(p.name for p in OUT.glob("*.html")))
 

@@ -86,7 +86,7 @@ p{margin:0}
 
 /* Header */
 .site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:80;transition:background .4s,box-shadow .4s,backdrop-filter .4s}
-.site-head.scrolled{background:rgba(250,250,253,.78);backdrop-filter:saturate(160%) blur(16px);-webkit-backdrop-filter:saturate(160%) blur(16px);box-shadow:0 1px 0 var(--line)}
+.site-head.scrolled,.no-js .site-head{background:rgba(250,250,253,.78);backdrop-filter:saturate(160%) blur(16px);-webkit-backdrop-filter:saturate(160%) blur(16px);box-shadow:0 1px 0 var(--line)}
 .site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:78px}
 .brand{display:inline-flex;align-items:center;text-decoration:none}
 .brand img{height:40px;width:auto}
@@ -808,8 +808,16 @@ img.avatar{object-fit:cover;object-position:50% 22%;background:var(--tint)}
 .af-msg{margin:0;font-size:14.5px;line-height:1.5;color:#C62F3F}
 .af-msg:empty{display:none}
 .af-msg a{color:inherit;font-weight:600}
+/* Ohne JavaScript: der Server leitet auf #gesendet bzw. #fehler weiter, :target zeigt die Meldung */
+.af-nojs{display:none;margin:0;font-size:14.5px;line-height:1.5;color:#C62F3F}
+.af-nojs a{color:inherit;font-weight:600}
+.af-nojs:target{display:block}
+.js .af-nojs{display:none}
 .af-done{display:grid;justify-items:start;gap:18px;padding-block:clamp(8px,2vw,24px)}
 .af-done[hidden]{display:none}
+.af-done:target{display:grid}
+.af-done:target .af-done-ic svg{animation:draw .6s var(--ease) .25s forwards}
+.apply-form:has(.af-done:target) > :not(.af-done){display:none}
 .af-done:focus{outline:none}
 .af-done h2{font-size:var(--s-2);letter-spacing:-.035em}
 .af-done p{margin:0;color:var(--muted);max-width:46ch}

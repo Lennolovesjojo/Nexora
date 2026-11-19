@@ -31,7 +31,7 @@ function antwort(bool $ok, string $fehler = '', int $code = 400): void
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($ok ? ['ok' => true] : ['ok' => false, 'error' => $fehler], JSON_UNESCAPED_UNICODE);
     } else {
-        header('Location: bewerbung.html?status=' . ($ok ? 'gesendet' : 'fehler'), true, 303);
+        header('Location: bewerbung.html?status=' . ($ok ? 'gesendet#gesendet' : 'fehler#fehler'), true, 303);
     }
     exit;
 }

@@ -50,7 +50,8 @@ function antwort(req, res, ok, fehler = "", code = 400) {
     res.end(JSON.stringify(ok ? { ok: true } : { ok: false, error: fehler }));
   } else {
     res.statusCode = 303;
-    res.setHeader("Location", `${SEITE}?status=${ok ? "gesendet" : "fehler"}`);
+    // Anker #gesendet / #fehler: ohne JavaScript zeigt das CSS (:target) die passende Meldung
+    res.setHeader("Location", `${SEITE}?status=${ok ? "gesendet#gesendet" : "fehler#fehler"}`);
     res.end();
   }
 }

@@ -962,8 +962,9 @@ apply_body = f"""<section class="page-hero" style="padding-bottom:clamp(64px,8vw
         <div class="af-actions">
           <button class="btn btn--grad magnetic af-submit" type="submit"><span class="af-label">Bewerbung absenden</span> {ARR}</button>
           <p class="af-msg" role="alert"></p>
+          <p class="af-nojs" id="fehler">Das Senden hat leider nicht geklappt. Schick deine Bewerbung gern direkt an <a href="mailto:{CAREER_MAIL}">{CAREER_MAIL}</a>.</p>
         </div>
-        <div class="af-done" hidden>
+        <div class="af-done" id="gesendet" hidden>
           <span class="af-done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
           <h2>Danke für deine Bewerbung!</h2>
           <p>Sie ist gut bei uns angekommen. Wir melden uns innerhalb weniger Tage bei dir, eine Bestätigung ist schon unterwegs in dein Postfach.</p>
@@ -1025,8 +1026,9 @@ contact_body = f"""<section class="page-hero" style="padding-bottom:clamp(64px,8
         <div class="af-actions">
           <button class="btn btn--grad magnetic af-submit" type="submit"><span class="af-label">Anfrage senden</span> {ARR}</button>
           <p class="af-msg" role="alert"></p>
+          <p class="af-nojs" id="fehler">Das Senden hat leider nicht geklappt. Schreiben Sie uns gern direkt an <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a>.</p>
         </div>
-        <div class="af-done" hidden>
+        <div class="af-done" id="gesendet" hidden>
           <span class="af-done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
           <h2>Vielen Dank für Ihre Anfrage!</h2>
           <p>Sie ist gut bei uns angekommen. Wir melden uns {ANTWORTZEIT}, eine Bestätigung ist schon unterwegs in Ihr Postfach.</p>

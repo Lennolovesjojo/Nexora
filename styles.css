@@ -278,15 +278,20 @@ main > .section.dark:last-child{margin-bottom:clamp(8px,1.2vw,18px)}
 .dark::before{content:"";position:absolute;width:60vw;height:60vw;max-width:900px;max-height:900px;left:50%;top:-30%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(106,27,214,.45),rgba(22,103,240,.18) 55%,transparent);z-index:-1;filter:blur(20px)}
 
 /* Statistiken */
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,.08);border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.08)}
-@media (min-width:900px){.stats{grid-template-columns:repeat(4,1fr)}}
-.stat{background:var(--ink);padding:clamp(26px,3.4vw,44px) clamp(20px,2.6vw,32px);display:grid;gap:12px;align-content:start}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.08);border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+@media (min-width:900px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{background:var(--ink);padding:clamp(26px,3.4vw,44px) clamp(20px,2.6vw,32px);display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start}
 .stat-num{font:600 clamp(2.3rem,1.3rem + 3.6vw,4.6rem)/1 var(--f-display);letter-spacing:-.05em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .stat-num .u{font-size:.58em;letter-spacing:-.02em;margin-left:.08em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat p{color:var(--on-dark-muted);font-size:15px;max-width:22ch}
+.stat p{color:var(--on-dark-muted);font-size:15px;max-width:22ch;overflow-wrap:break-word}
 .stat .bar{height:3px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
 .stat .bar i{display:block;height:100%;width:var(--w,0%);background:var(--grad);transform-origin:left;transform:scaleX(0);transition:transform 1.8s var(--ease)}
 .stat.in .bar i{transform:scaleX(1)}
+/* schmale Handys: Zahlen und Wörter wie "durchschnittliche" passen sonst nicht in zwei Spalten */
+@media (max-width:420px){.stat{padding:26px 16px}.stat-num{font-size:clamp(2rem,9.4vw,2.3rem)}.stat p{font-size:14px}}
+@media (max-width:359px){.stats{grid-template-columns:minmax(0,1fr)}.stat{padding:26px 22px}.stat-num{font-size:2.3rem}}
+/* vier Spalten ab 900 px: große Zahlen bis 1100 px etwas kleiner, damit "1.000+" mit Abstand in die Zelle passt */
+@media (min-width:900px) and (max-width:1099px){.stat-num{font-size:clamp(2.3rem,.2rem + 5vw,4.6rem)}}
 
 /* Bento */
 .bento{display:grid;gap:16px;grid-template-columns:1fr}

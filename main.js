@@ -601,15 +601,20 @@
       const frame = document.createElement("iframe");
       frame.title = "Beratungstermin bei Nexora buchen";
       frame.src = u.href;
-      let alive = false;
-      const ready = () => { if (frame.isConnected) { alive = true; cal.classList.add("ready"); } };
+      // Sichtbar erst, wenn sich Calendly selbst meldet: "load" kommt auch, wenn ein Werbeblocker oder eine
+      // Firewall den Kalender sperrt, dann stünde nur ein leerer Rahmen da. In dem Fall kommt die Karte mit Direktlink.
+      let alive = false, wait = 0;
+      const ready = () => { if (frame.isConnected) { alive = true; clearTimeout(wait); cal.classList.add("ready"); } };
       const showFallback = () => {
+        if (alive || !frame.isConnected) return;
+        clearTimeout(wait);
         cal.classList.remove("embed", "ready");
         if (ask) ask.hidden = true;
         if (direct) direct.hidden = false;
         cal.replaceChildren(...fallback);
       };
-      frame.addEventListener("load", ready);
+      const giveUp = ms => { clearTimeout(wait); wait = setTimeout(showFallback, ms); };
+      frame.addEventListener("load", () => { if (!alive) giveUp(8000); });   // Seite da, aber noch keine Nachricht
       cal.classList.add("embed");
       cal.replaceChildren(loader, frame);
 
@@ -626,7 +631,7 @@
       document.addEventListener("securitypolicyviolation", e => {
         if (String(e.blockedURI).includes("calendly")) showFallback();
       });
-      setTimeout(() => { if (!alive && frame.isConnected) showFallback(); }, 20000);
+      giveUp(20000);   // lädt gar nicht
     };
 
     if (cal.dataset.consent === "1" && ask && direct) {

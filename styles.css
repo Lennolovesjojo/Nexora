@@ -141,6 +141,14 @@ p{margin:0}
    Mit JS: .is-live lädt die Inhalte, .is-lit (Bühne gut sichtbar) schaltet das Licht im Haus an und zeigt die Prüfwerte,
    .is-sent zeigt nach dem ersten Klick die Meldung "Neue Anfrage". Ohne JS ist alles sofort sichtbar. */
 .stage{position:relative;width:min(1040px,100%);margin-top:clamp(34px,4.4vw,56px);perspective:1600px;cursor:default;-webkit-user-select:none;user-select:none}
+/* Laptops mit wenig Höhe (1366×768, 1536×864): Abstände und Überschrift folgen der Fensterhöhe,
+   damit die Vorschau schon ohne Scrollen hervorschaut. Ab etwa 1000 px Höhe bleibt alles wie oben. */
+@media (min-width:900px){
+  .hero{padding-top:calc(78px + clamp(24px,14vh - 70px,clamp(36px,5.5vw,80px)))}
+  .hero-inner{gap:clamp(16px,4vh - 10px,clamp(20px,2.4vw,30px))}
+  .hero h1{font-size:clamp(3.4rem,19vh - 46px,var(--s-4))}
+  .stage{margin-top:clamp(24px,9vh - 40px,clamp(34px,4.4vw,56px))}
+}
 .screen{position:relative;container:screen / inline-size;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 2px 0 rgba(255,255,255,.8) inset,0 50px 100px -40px rgba(40,24,120,.45),0 20px 40px -30px rgba(15,12,34,.4);overflow:hidden;transform:rotateX(10deg) scale(.96);transform-origin:50% 0;transition:transform .25s linear;text-align:left}
 .screen-bar{position:relative;display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--bg)}
 .screen-bar i{width:10px;height:10px;border-radius:50%;background:#DCD8E9}
@@ -864,4 +872,19 @@ img.avatar{object-fit:cover;object-position:50% 22%;background:var(--tint)}
   .hs-cursor,.screen-load{display:none!important}
   .curtain,.progress,.wa-float,.skip,.menu-btn,.mobile-nav{display:none!important}
   .site-head{position:static}
+  /* Farben wie am Bildschirm drucken: sonst fehlen Verläufe und dunkle Flächen, und helle Schrift
+     (dunkle Bereiche, Buttons, Verlaufswörter) wäre auf weißem Papier unsichtbar */
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .foot-big,.marquee{display:none!important}
+  /* Kundenstimmen: stehendes Raster statt Laufband, ohne die Kopien für die Endlosschleife */
+  .reviews{-webkit-mask-image:none;mask-image:none;padding-inline:20px}
+  .r-track{animation:none!important;width:auto;flex-wrap:wrap;justify-content:center}
+  .review[aria-hidden="true"]{display:none}
+  .review{width:calc(50% - 8px)}
+  /* Rechtstexte normal umbrechen (als Grid rutschte der ganze Inhalt auf Seite 2) */
+  .legal,.legal section{display:block}
+  .legal > * + *{margin-top:34px}
+  .legal section > * + *{margin-top:12px}
+  h2,h3,.eyebrow{break-after:avoid}
+  :is(.plan,.card,.review,.member,.perk,.stat,.tl-item,.job-card,.facts,.checks li){break-inside:avoid}
 }

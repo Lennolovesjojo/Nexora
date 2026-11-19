@@ -28,7 +28,8 @@ CAREER_MAIL = "info@infonexora.de"    # Bewerbungen (auch als Ausweichadresse an
 # nexora-webstudio.dev: bei Vercel gekauft und mit dem Projekt verbunden (Lennos Wahl vom 19.11.2026)
 SITE_URL = "https://nexora-webstudio.dev"
 
-# Firmendaten für Impressum und Datenschutz. Leere Felder erscheinen als markierter Platzhalter.
+# Firmendaten für Impressum und Datenschutz. Leere Felder erscheinen im Testmodus als markierter Platzhalter
+# und werden live einfach weggelassen (Lenno, 19.11.2026: Adresse, HRB und USt-IdNr. vorerst weglassen).
 # Nexora ist ein Angebot der Baldwin Bell Green GmbH (Lenno, 19.11.2026).
 FIRMA = "Baldwin Bell Green GmbH"
 GESCHAEFTSFUEHRER = "Linus Schoeller"
@@ -40,9 +41,13 @@ HRB = ""                # z. B. "HRB 123456 B"
 UST_ID = ""             # z. B. "DE123456789", leer lassen, falls es keine gibt (dann entfällt die Zeile nach dem Ausfüllen)
 UST_ID_OFFEN = True     # True, solange noch nicht geklärt ist, ob es eine USt-IdNr. gibt
 
+# Beispielinhalte: True zeigt die Beispiel-Kundenstimmen und die noch unbelegten Zahlen (14 Tage, 99,9 %, 4,9/5).
+# False blendet die Kundenstimmen aus und zeigt im Zahlenbereich stattdessen feste Angebotsdaten.
+BEISPIELE = False   # seit 19.11.2026 ausgeblendet (Lennos Wahl beim Livegang)
+
 # Testmodus: Solange LIVE = False ist, nehmen Suchmaschinen die Seite nicht auf (noindex), z. B. den Testlink von Vercel.
-# Erst auf True setzen, wenn Domain, Impressum, Datenschutz und echte Inhalte stehen.
-LIVE = False
+# LIVE = True: für Google freigegeben, mit Canonical-Links, sitemap.xml und Sitemap-Zeile in robots.txt (seit 19.11.2026).
+LIVE = True
 
 # Versand der Formulare: "vercel" (Funktionen api/bewerbung.js und api/anfrage.js über SMTP)
 # oder "php" (bewerbung.php und anfrage.php für klassischen Webspace)
@@ -58,6 +63,7 @@ from urllib.parse import quote as _quote
 WA_HREF = f"https://wa.me/{WHATSAPP_NUMBER}?text={_quote(WHATSAPP_TEXT)}"
 WA_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>')
 WA_ATTRS = f'href="{WA_HREF}" target="_blank" rel="noopener"'
+WHATSAPP_ANZEIGE = "+49 172 4358302"   # so erscheint die Nummer im Impressum
 WA_FLOAT = f'<a class="wa-float" {WA_ATTRS} aria-label="Nexora per WhatsApp schreiben"><span class="wa-ic">{WA_SVG}</span><span class="wa-txt">WhatsApp</span></a>\n'
 
 ARR = '<span class="arr" aria-hidden="true">→</span>'
@@ -170,19 +176,41 @@ FOOTER = f'''<footer class="site-foot">
 '''
 
 # Platzhalter-Zahlen außer "1.000+ Kunden": vor Livegang durch echte Werte ersetzen.
+if BEISPIELE:
+    STAT_LEDE = "Hinter jeder Zahl steht ein Unternehmen, das heute mit seiner Website mehr erreicht als vorher."
+    STAT_TILES = (
+        '<div class="stat" data-obs><div class="stat-num"><span data-count="14">14</span><span class="u"> Tage</span></div><p>im Schnitt vom Erstgespräch bis zum Livegang</p><div class="bar"><i style="--w:62%"></i></div></div>\n'
+        '      <div class="stat" data-obs><div class="stat-num"><span data-count="99.9" data-decimals="1" data-from="90">99,9</span><span class="u"> %</span></div><p>Verfügbarkeit unserer Server im Jahresmittel</p><div class="bar"><i style="--w:99.9%"></i></div></div>\n'
+        '      <div class="stat" data-obs><div class="stat-num"><span data-count="4.9" data-decimals="1">4,9</span><span class="u">/5</span></div><p>durchschnittliche Bewertung unserer Kunden</p><div class="bar"><i style="--w:98%"></i></div></div>')
+else:
+    # feste Angebotsdaten statt unbelegter Werte
+    STAT_LEDE = "Klare Preise, schnelle Antworten und feste Ansprechpersonen, die Ihre Website betreuen."
+    STAT_TILES = (
+        '<div class="stat" data-obs><div class="stat-num"><span class="u">ab </span><span data-count="150">150</span><span class="u"> €</span></div><p>im Monat für Ihre Website zur Miete, inkl.&nbsp;Hosting, zzgl.&nbsp;MwSt.</p><div class="bar"><i style="--w:60%"></i></div></div>\n'
+        '      <div class="stat" data-obs><div class="stat-num"><span data-count="30">30</span><span class="u"> Min.</span></div><p>kostenlose und unverbindliche Erstberatung</p><div class="bar"><i style="--w:50%"></i></div></div>\n'
+        '      <div class="stat" data-obs><div class="stat-num"><span>1</span><span class="u"> Werktag</span></div><p>in der Regel bis zur Antwort auf Ihre Anfrage</p><div class="bar"><i style="--w:85%"></i></div></div>')
+
+STATS_CLS = "" if BEISPIELE else " stats--lang"   # längere Einheiten (ab 150 €, 1 Werktag): Schrift auf großen Bildschirmen etwas kleiner
+STAT_HINWEIS = '<!-- Hinweis: Werte außer "1.000+ Kunden" sind Platzhalter und müssen vor dem Livegang geprüft werden. -->' if BEISPIELE else ""
+UPTIME_ROW = "<span>letzte 30 Tage</span><span>99,9 % online</span>" if BEISPIELE else "<span>SSL · Backup · Monitoring</span><span>inklusive</span>"
+# Performance-Anzeigen: ohne Beispiele die gemessenen Lighthouse-Werte dieser Website am Desktop (19.11.2026: 100, LCP 0,5 s, CLS 0, TBT 0 ms)
+if BEISPIELE:
+    PS_WERT, PS_ART, PS_STYLE, PS_VITALS, PS_SATZ = "98", "mobil", "", ("1,1 s", "0,01", "30 ms"), ""
+else:
+    PS_WERT, PS_ART, PS_STYLE, PS_VITALS, PS_SATZ = "100", "Desktop", ' style="--ps-off:0;--g-off:0"', ("0,5 s", "0,00", "0 ms"), " So schnell lädt diese Website."
+PS_CLASS = ' class="w3"' if len(PS_WERT) > 2 else ""
+
 def stats(title="Zahlen, die für sich sprechen.", eyebrow="Nexora in Zahlen"):
     return f'''<section class="section dark" aria-labelledby="stats-h">
   <div class="wrap">
     <div class="head head--split">
       <div style="display:grid;gap:22px"><span class="eyebrow">{eyebrow}</span><h2 id="stats-h" class="reveal">{title}</h2></div>
-      <p class="lede reveal" data-d="1">Hinter jeder Zahl steht ein Unternehmen, das heute mit seiner Website mehr erreicht als vorher.</p>
+      <p class="lede reveal" data-d="1">{STAT_LEDE}</p>
     </div>
-    <!-- Hinweis: Werte außer "1.000+ Kunden" sind Platzhalter und müssen vor dem Livegang geprüft werden. -->
-    <div class="stats">
+    {STAT_HINWEIS}
+    <div class="stats{STATS_CLS}">
       <div class="stat" data-obs><div class="stat-num"><span data-count="1000">1.000</span><span class="u">+</span></div><p>zufriedene Kunden aus ganz Deutschland</p><div class="bar"><i style="--w:100%"></i></div></div>
-      <div class="stat" data-obs><div class="stat-num"><span data-count="14">14</span><span class="u"> Tage</span></div><p>im Schnitt vom Erstgespräch bis zum Livegang</p><div class="bar"><i style="--w:62%"></i></div></div>
-      <div class="stat" data-obs><div class="stat-num"><span data-count="99.9" data-decimals="1" data-from="90">99,9</span><span class="u"> %</span></div><p>Verfügbarkeit unserer Server im Jahresmittel</p><div class="bar"><i style="--w:99.9%"></i></div></div>
-      <div class="stat" data-obs><div class="stat-num"><span data-count="4.9" data-decimals="1">4,9</span><span class="u">/5</span></div><p>durchschnittliche Bewertung unserer Kunden</p><div class="bar"><i style="--w:98%"></i></div></div>
+      {STAT_TILES}
     </div>
   </div>
 </section>
@@ -252,6 +280,8 @@ def review(r, dup=False):
     return f'<figure class="review" style="margin:0"{hide}><span class="stars" role="img" aria-label="5 von 5 Sternen">★★★★★</span><p>„{txt}“</p><footer><i>{i}</i><span>{who}<small>Kunde seit 2024</small></span></footer></figure>'
 
 def reviews():
+    if not BEISPIELE:
+        return ""   # Beispiel-Kundenstimmen ausgeblendet, bis echte Bewertungen vorliegen
     # zweite Hälfte nur für die Endlos-Animation, für Screenreader ausgeblendet
     a = "".join(review(r) for r in REVIEWS[:4]) + "".join(review(r, True) for r in REVIEWS[:4])
     b = "".join(review(r) for r in REVIEWS[4:]) + "".join(review(r, True) for r in REVIEWS[4:])
@@ -538,7 +568,7 @@ HERO_STAGE = f'''<div class="stage fade-up d3" aria-hidden="true">
       </div>
       <div class="float f1" data-depth="18"><span class="ic">+1</span><span><b>Neue Anfrage</b><small>über das Kontaktformular</small></span></div>
       <div class="float f2" data-depth="-14"><span class="ic ok">{HS_SHIELD}</span><span><b>SSL &amp; Backup aktiv</b><small>täglich, automatisch</small></span></div>
-      <div class="float f3" data-depth="10"><span class="ic ps">{HS_RING}<i>98</i></span><span><b>PageSpeed 98/100</b><small>mobil gemessen</small></span></div>
+      <div class="float f3" data-depth="10"{PS_STYLE}><span class="ic ps">{HS_RING}<i{PS_CLASS}>{PS_WERT}</i></span><span><b>PageSpeed {PS_WERT}/100</b><small>{PS_ART} gemessen</small></span></div>
     </div>'''
 
 SECTORS = ["Handwerk", "Gastronomie", "Arztpraxen", "Kanzleien", "Immobilien", "Einzelhandel", "Fitness", "Beauty", "Logistik", "Beratung", "Hotels", "Vereine"]
@@ -576,20 +606,20 @@ index_body = f'''<section class="hero">
       <article class="card b-2 reveal" data-d="1">
         <span class="k">Performance</span>
         <h3>Schnell geladen</h3>
-        <p>Kurze Ladezeiten halten Besucher auf der Seite und helfen bei Google.</p>
+        <p>Kurze Ladezeiten halten Besucher auf der Seite und helfen bei Google.{PS_SATZ}</p>
         <div class="viz" aria-hidden="true">
-          <div class="gauge">
+          <div class="gauge"{PS_STYLE}>
             <svg viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A1BD6"/><stop offset="1" stop-color="#1667F0"/></linearGradient></defs><circle class="trk" cx="50" cy="50" r="42"/><circle class="val" cx="50" cy="50" r="42"/></svg>
-            <div><b data-count="98">98</b><small>PageSpeed<br>mobil</small></div>
+            <div><b data-count="{PS_WERT}">{PS_WERT}</b><small>PageSpeed<br>{PS_ART}</small></div>
           </div>
-          <ul class="vitals"><li><span>Ladezeit (LCP)</span><b>1,1 s</b></li><li><span>Stabilität (CLS)</span><b>0,01</b></li><li><span>Reaktion (TBT)</span><b>30 ms</b></li></ul>
+          <ul class="vitals"><li><span>Ladezeit (LCP)</span><b>{PS_VITALS[0]}</b></li><li><span>Stabilität (CLS)</span><b>{PS_VITALS[1]}</b></li><li><span>Reaktion (TBT)</span><b>{PS_VITALS[2]}</b></li></ul>
         </div>
       </article>
       <article class="card b-3 reveal">
         <span class="k">Hosting</span>
         <h3>Sicher gehostet</h3>
         <p>SSL, Backups und Überwachung sind bei der Miete inklusive.</p>
-        <div class="viz" aria-hidden="true"><div class="uptime"></div><div class="mono-row"><span>letzte 30 Tage</span><span>99,9 % online</span></div></div>
+        <div class="viz" aria-hidden="true"><div class="uptime"></div><div class="mono-row">{UPTIME_ROW}</div></div>
       </article>
       <article class="card b-4 reveal" data-d="1">
         <span class="k">SEO</span>
@@ -869,7 +899,7 @@ career_body = f'''<section class="page-hero">
 
 # ================= Termin =================
 CALENDLY = "https://calendly.com/linus-bbgnet/30min"   # Link zum Buchungskalender
-CALENDLY_CONSENT = False  # True = Kalender erst nach Klick auf "Kalender anzeigen" laden (datensparsamer), False = sofort laden
+CALENDLY_CONSENT = True   # True = Kalender erst nach Klick auf "Kalender anzeigen" laden (datensparsamer), False = sofort laden
 termin_body = f'''<section class="page-hero" style="padding-bottom:clamp(64px,8vw,120px)">
   <div class="wrap book">
     <div class="book-side book-intro">
@@ -1079,15 +1109,23 @@ for _name, _to in (("bewerbung", CAREER_MAIL), ("anfrage", INFO_MAIL)):
 def ph(t):
     return f'<span class="ph">{t}</span>'
 
+ZEIGE_PLATZHALTER = not LIVE   # live werden leere Felder weggelassen statt markiert
+
 def wert(v, platzhalter):
-    return _html.escape(v) if v else ph(platzhalter)
+    if v:
+        return _html.escape(v)
+    return ph(platzhalter) if ZEIGE_PLATZHALTER else ""
+
+def zeilen(*teile):
+    # verbindet nur die nicht leeren Teile, jeweils mit Zeilenumbruch
+    return "<br>".join(t for t in teile if t)
 
 IMPRESSUM_OFFEN = not all([STRASSE, PLZ_ORT, TELEFON, REGISTERGERICHT, HRB]) or (UST_ID_OFFEN and not UST_ID)
 IMP_NOTE = ('<p class="legal-note">Vorlage: Die markierten Felder müssen vor dem Livegang mit den echten Firmendaten ausgefüllt werden.</p>'
-            if IMPRESSUM_OFFEN else "")
+            if IMPRESSUM_OFFEN and ZEIGE_PLATZHALTER else "")
 if UST_ID:
     IMP_UST = f'<section><h2>Umsatzsteuer-ID</h2><p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {_html.escape(UST_ID)}</p></section>'
-elif UST_ID_OFFEN:
+elif UST_ID_OFFEN and ZEIGE_PLATZHALTER:
     IMP_UST = f'<section><h2>Umsatzsteuer-ID</h2><p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {ph("USt-IdNr.")}</p></section>'
 else:
     IMP_UST = ""
@@ -1096,8 +1134,25 @@ CAL_DS = ("Der Kalender wird erst geladen, wenn Sie auf der Seite „Beratungste
           if CALENDLY_CONSENT else "Der Kalender ist auf der Seite „Beratungstermin“ eingebunden und wird beim Aufruf dieser Seite direkt von Calendly geladen. Dabei werden Daten wie Ihre IP-Adresse an Calendly übertragen, und Calendly kann Cookies setzen.")
 COOKIE_DS = ("Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur Calendly setzen, und zwar erst, wenn Sie den Kalender laden (siehe Abschnitt 6)."
              if CALENDLY_CONSENT else "Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur der Calendly-Kalender auf der Seite „Beratungstermin“ setzen (siehe Abschnitt 6).")
-FORM_DS = ("Die Formulare werden über eine Funktion auf Servern von Vercel in Frankfurt am Main verarbeitet und per E-Mail über " + ph("E-Mail-Anbieter") + " an uns übermittelt."
+MAIL_ANBIETER = "STRATO GmbH (Berlin)"   # Postfach und Versand der Formular-Mails
+CAL_RG = ("Ihre Einwilligung, die Sie mit dem Klick auf „Kalender anzeigen“ erteilen (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Sie können sie jederzeit für die Zukunft widerrufen, indem Sie die Seite neu laden und den Kalender nicht mehr öffnen"
+          if CALENDLY_CONSENT else "unser berechtigtes Interesse an einer einfachen Online-Terminvereinbarung (Art. 6 Abs. 1 lit. f DSGVO)")
+FORM_DS = ("Die Formulare werden über eine Funktion auf Servern von Vercel in Frankfurt am Main verarbeitet und per E-Mail über " + MAIL_ANBIETER + " an uns übermittelt."
            if FORM_BACKEND == "vercel" else "Die Formulare werden auf dem Webserver verarbeitet und per E-Mail an uns übermittelt.")
+
+DS_STAND = "November 2026"
+DS_NOTE = ('<p class="legal-note">Die markierten Felder werden noch ergänzt.</p>' if IMPRESSUM_OFFEN and ZEIGE_PLATZHALTER else "")
+
+_tel, _rg, _hrb = wert(TELEFON, "Telefonnummer"), wert(REGISTERGERICHT, "Amtsgericht"), wert(HRB, "HRB-Nummer")
+_mail = f'<a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a>'
+IMP_ADRESSE = zeilen(wert(FIRMA, "Firmenname und Rechtsform"), wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"))
+IMP_KONTAKT = zeilen("Telefon: " + _tel if _tel else "", "E-Mail: " + _mail,
+                     f'WhatsApp: <a {WA_ATTRS}>{WHATSAPP_ANZEIGE}</a>' if WHATSAPP_NUMBER else "")
+IMP_REGISTER = ('<section><h2>Registereintrag</h2><p>' + zeilen("Eintragung im Handelsregister", "Registergericht: " + _rg if _rg else "",
+                "Registernummer: " + _hrb if _hrb else "") + '</p></section>') if (_rg or _hrb) else ""
+IMP_MSTV = zeilen(wert(GESCHAEFTSFUEHRER, "Name"), wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"))
+DS_VERANTWORTLICH = zeilen(wert(FIRMA, "Firmenname"), wert(STRASSE, "Straße und Hausnummer"), wert(PLZ_ORT, "PLZ und Ort"),
+                           "Vertreten durch den Geschäftsführer " + wert(GESCHAEFTSFUEHRER, "Name"), "E-Mail: " + _mail)
 
 impressum_body = f'''<section class="page-hero">
   <div class="wrap">
@@ -1109,12 +1164,12 @@ impressum_body = f'''<section class="page-hero">
   <div class="wrap"><div class="legal">
     <!-- Firmendaten oben in build.py (FIRMA, GESCHAEFTSFUEHRER, STRASSE ...). Vor Veröffentlichung rechtlich prüfen lassen. -->
     {IMP_NOTE}
-    <section><h2>Angaben gemäß § 5 DDG</h2><p>{wert(FIRMA, "Firmenname und Rechtsform")}<br>{wert(STRASSE, "Straße und Hausnummer")}<br>{wert(PLZ_ORT, "PLZ und Ort")}</p><p>Nexora ist ein Angebot der {wert(FIRMA, "Firmenname")}.</p></section>
+    <section><h2>Angaben gemäß § 5 DDG</h2><p>{IMP_ADRESSE}</p><p>Nexora ist ein Angebot der {wert(FIRMA, "Firmenname")}.</p></section>
     <section><h2>Vertreten durch</h2><p>Geschäftsführer: {wert(GESCHAEFTSFUEHRER, "Name der Geschäftsführung")}</p></section>
-    <section><h2>Kontakt</h2><p>Telefon: {wert(TELEFON, "Telefonnummer")}<br>E-Mail: <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a></p></section>
-    <section><h2>Registereintrag</h2><p>Eintragung im Handelsregister<br>Registergericht: {wert(REGISTERGERICHT, "Amtsgericht")}<br>Registernummer: {wert(HRB, "HRB-Nummer")}</p></section>
+    <section><h2>Kontakt</h2><p>{IMP_KONTAKT}</p></section>
+    {IMP_REGISTER}
     {IMP_UST}
-    <section><h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2><p>{wert(GESCHAEFTSFUEHRER, "Name")}<br>{wert(STRASSE, "Straße und Hausnummer")}<br>{wert(PLZ_ORT, "PLZ und Ort")}</p></section>
+    <section><h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2><p>{IMP_MSTV}</p></section>
   </div></div>
 </section>
 '''
@@ -1127,17 +1182,19 @@ datenschutz_body = f'''<section class="page-hero">
 </section>
 <section class="section" style="padding-top:0">
   <div class="wrap"><div class="legal">
-    <!-- VORLAGE: Gliederung für die Datenschutzerklärung. Den vollständigen Text bitte mit einem Generator oder einer Fachperson erstellen. -->
-    <p class="legal-note">Vorlage: Diese Gliederung zeigt, welche Punkte die Datenschutzerklärung für diese Website abdecken muss. Der vollständige Text wird noch ergänzt.</p>
-    <section><h2>1. Verantwortliche Stelle</h2><p>{wert(FIRMA, "Firmenname")}<br>{wert(STRASSE, "Straße und Hausnummer")}<br>{wert(PLZ_ORT, "PLZ und Ort")}<br>Vertreten durch den Geschäftsführer {wert(GESCHAEFTSFUEHRER, "Name")}<br>E-Mail: <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a></p></section>
-    <section><h2>2. Hosting</h2><p>Diese Website wird bei {ph("Hosting-Anbieter, z. B. Vercel Inc. (USA), mit Auftragsverarbeitungsvertrag")} betrieben. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse und Zeitpunkt in Server-Logfiles verarbeitet. {FORM_DS}</p></section>
-    <section id="anfrage"><h2>3. Kontaktformular und E-Mail</h2><p>Wenn Sie uns über das Kontaktformular oder per E-Mail schreiben, verarbeiten wir Ihre Angaben zur Bearbeitung Ihrer Anfrage. Formularangaben werden per E-Mail an uns übermittelt und nicht auf dem Webserver gespeichert. Sie erhalten automatisch eine Eingangsbestätigung. {ph("Rechtsgrundlage und Speicherdauer ergänzen")}</p></section>
-    <section><h2>4. Kontakt per WhatsApp</h2><p>Über den WhatsApp-Button können Sie uns direkt schreiben. Die Verbindung zu WhatsApp entsteht erst, wenn Sie den Button anklicken. {ph("Details zu Anbieter (WhatsApp Ireland Ltd. / Meta), Datenübermittlung und Rechtsgrundlage ergänzen")}</p></section>
-    <section id="bewerbung"><h2>5. Bewerbungen</h2><p>Wenn Sie sich über unser Formular bewerben, verarbeiten wir Ihre Angaben und Unterlagen für das Bewerbungsverfahren. Sie werden per E-Mail an uns übermittelt und nicht auf dem Webserver gespeichert. {ph("Rechtsgrundlage und Löschfrist ergänzen, z. B. Löschung sechs Monate nach Abschluss des Verfahrens")}</p></section>
-    <section id="calendly"><h2>6. Terminbuchung über Calendly</h2><p>Für die Buchung von Beratungsterminen nutzen wir Calendly. {CAL_DS} {ph("Details zu Anbieter, Datenübermittlung und Rechtsgrundlage ergänzen")}</p></section>
-    <section><h2>7. Cookies und Speicher im Browser</h2><p>{COOKIE_DS}</p></section>
-    <section><h2>8. Schriftarten</h2><p>Die Schriftarten dieser Website sind lokal eingebunden. Beim Aufruf wird keine Verbindung zu Servern von Google hergestellt.</p></section>
-    <section><h2>9. Ihre Rechte</h2><ul><li>Auskunft über Ihre gespeicherten Daten</li><li>Berichtigung, Löschung und Einschränkung der Verarbeitung</li><li>Widerspruch und Datenübertragbarkeit</li><li>Beschwerde bei einer Aufsichtsbehörde</li></ul></section>
+    <!-- Entwurf auf Grundlage der tatsächlich genutzten Dienste. Vor dem Livegang von einer Fachperson oder einem Generator prüfen lassen. -->
+    {DS_NOTE}
+    <section><h2>1. Verantwortliche Stelle</h2><p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p><p>{DS_VERANTWORTLICH}</p></section>
+    <section><h2>2. Das Wichtigste in Kürze</h2><p>Wir verarbeiten personenbezogene Daten nur, soweit es für den Betrieb dieser Website, die Beantwortung Ihrer Anfragen, die Terminvereinbarung und Bewerbungsverfahren nötig ist. Analyse-, Tracking- oder Werbedienste setzen wir nicht ein. Personenbezogene Daten sind alle Angaben, mit denen Sie persönlich erkannt werden können, zum Beispiel Name, E-Mail-Adresse oder IP-Adresse.</p></section>
+    <section><h2>3. Hosting und Server-Logfiles</h2><p>Diese Website wird bei Vercel Inc. (USA) gehostet. Die Seiten werden über das weltweite Servernetz von Vercel ausgeliefert, die Formulare auf Servern von Vercel in Frankfurt am Main verarbeitet. Bei jedem Aufruf verarbeitet Vercel technisch notwendige Daten wie IP-Adresse, Datum und Uhrzeit, die aufgerufene Seite, die zuvor besuchte Seite sowie Browser und Betriebssystem. Das ist nötig, um die Website auszuliefern und vor Angriffen zu schützen.</p><p>Rechtsgrundlage ist unser berechtigtes Interesse an einem sicheren und zuverlässigen Betrieb der Website (Art. 6 Abs. 1 lit. f DSGVO). Mit Vercel besteht ein Vertrag zur Auftragsverarbeitung. Soweit Daten in die USA übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der EU-Kommission zum EU-US Data Privacy Framework, soweit Vercel danach zertifiziert ist, und auf die Standardvertragsklauseln der EU-Kommission.</p></section>
+    <section id="anfrage"><h2>4. Kontaktformular und E-Mail</h2><p>Wenn Sie uns über das Kontaktformular schreiben, verarbeiten wir Ihr Anliegen, Ihren Namen, Ihre E-Mail-Adresse und Ihre Nachricht sowie, falls angegeben, Unternehmen, Telefonnummer und Website. {FORM_DS} Auf dem Webserver wird nichts gespeichert. An die angegebene Adresse schicken wir automatisch eine Eingangsbestätigung. Schreiben Sie uns direkt per E-Mail, gilt das sinngemäß.</p><p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, wenn Ihre Anfrage einen Vertrag oder dessen Vorbereitung betrifft, und sonst unser berechtigtes Interesse an der Beantwortung von Anfragen (Art. 6 Abs. 1 lit. f DSGVO).</p><p>Zum Schutz vor Missbrauch enthält das Formular ein für Menschen unsichtbares Feld und misst, wie lange das Ausfüllen dauert. Außerdem merkt sich der Server kurzzeitig im Arbeitsspeicher, wie viele Anfragen von einer IP-Adresse kommen, um Massenanfragen zu begrenzen. Diese Angaben werden nicht dauerhaft gespeichert, Cookies werden dafür nicht verwendet.</p><p>Ihre Anfrage löschen wir, sobald sie erledigt ist und keine gesetzlichen Aufbewahrungspflichten entgegenstehen, etwa für Geschäftsbriefe (bis zu sechs Jahre) oder steuerlich relevante Unterlagen (bis zu zehn Jahre).</p></section>
+    <section id="bewerbung"><h2>5. Bewerbungen</h2><p>Wenn Sie sich über unser Formular bewerben, verarbeiten wir Ihren Namen, Ihre E-Mail-Adresse, die gewünschte Stelle und Ihre Nachricht sowie, falls angegeben, Telefonnummer, einen Link zu Profil oder Portfolio und Ihren Lebenslauf. Die Bewerbung wird wie beim Kontaktformular über Vercel in Frankfurt am Main und per E-Mail über {MAIL_ANBIETER} an uns übermittelt und nicht auf dem Webserver gespeichert. Sie erhalten eine Eingangsbestätigung.</p><p>Rechtsgrundlage ist die Anbahnung eines Beschäftigungsverhältnisses (Art. 6 Abs. 1 lit. b DSGVO). Zugriff haben nur die Personen, die am Bewerbungsverfahren beteiligt sind. Kommt es zu einer Einstellung, nehmen wir Ihre Unterlagen in die Personalakte auf. Andernfalls löschen wir Ihre Bewerbung spätestens sechs Monate nach Abschluss des Verfahrens, außer Sie haben einer längeren Speicherung zugestimmt.</p></section>
+    <section id="calendly"><h2>6. Terminbuchung über Calendly</h2><p>Für Beratungstermine nutzen wir Calendly, einen Dienst der Calendly LLC (USA). {CAL_DS} Wenn Sie einen Termin buchen, verarbeitet Calendly Ihre Eingaben wie Name, E-Mail-Adresse und den gewählten Termin und übermittelt sie an uns.</p><p>Rechtsgrundlage für die Buchung ist Art. 6 Abs. 1 lit. b DSGVO, für das Laden des Kalenders {CAL_RG}. Soweit Calendly Daten in den USA verarbeitet, stützt sich das auf den Angemessenheitsbeschluss zum EU-US Data Privacy Framework, soweit Calendly danach zertifiziert ist, und auf die Standardvertragsklauseln der EU-Kommission. Mehr dazu in der <a href="https://calendly.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Calendly</a>.</p></section>
+    <section><h2>7. Kontakt per WhatsApp</h2><p>Unsere WhatsApp-Buttons sind einfache Links. Eine Verbindung zu WhatsApp entsteht erst, wenn Sie darauf klicken. Ab dann gelten auch die Datenschutzbestimmungen von WhatsApp (WhatsApp Ireland Limited, Irland, ein Unternehmen der Meta-Gruppe), und WhatsApp kann Daten in die USA übermitteln. Wenn Sie uns schreiben, verarbeiten wir Ihre Telefonnummer, Ihren Profilnamen und Ihre Nachrichten, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b oder lit. f DSGVO). Möchten Sie WhatsApp nicht nutzen, erreichen Sie uns genauso per E-Mail oder über das Kontaktformular.</p></section>
+    <section><h2>8. Cookies und Speicher im Browser</h2><p>{COOKIE_DS} Analyse- oder Werbe-Cookies verwenden wir nicht.</p></section>
+    <section><h2>9. Schriftarten</h2><p>Die Schriftarten dieser Website sind lokal eingebunden. Beim Aufruf wird keine Verbindung zu Servern von Google hergestellt.</p></section>
+    <section><h2>10. Verschlüsselung</h2><p>Diese Website nutzt aus Sicherheitsgründen eine TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie an „https://“ in der Adresszeile Ihres Browsers.</p></section>
+    <section><h2>11. Ihre Rechte</h2><p>Sie haben jederzeit das Recht auf</p><ul><li>Auskunft über Ihre bei uns gespeicherten Daten (Art. 15 DSGVO)</li><li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li><li>Löschung (Art. 17 DSGVO) und Einschränkung der Verarbeitung (Art. 18 DSGVO)</li><li>Datenübertragbarkeit (Art. 20 DSGVO)</li><li>Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)</li><li>Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77 DSGVO)</li></ul><p><b>Widerspruchsrecht:</b> Verarbeiten wir Daten auf Grundlage unseres berechtigten Interesses (Art. 6 Abs. 1 lit. f DSGVO), können Sie dem aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen (Art. 21 DSGVO).</p><p>Für all das genügt eine formlose Nachricht an <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a>. Eine automatisierte Entscheidungsfindung einschließlich Profiling findet nicht statt.</p><p>Stand: {DS_STAND}</p></section>
   </div></div>
 </section>
 '''

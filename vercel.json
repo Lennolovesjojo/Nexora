@@ -54,14 +54,14 @@
   ],
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "www.nexora-webstudio.dev"
         }
       ],
-      "destination": "https://nexora-webstudio.dev/:path*",
+      "destination": "https://nexora-webstudio.dev/$1",
       "permanent": true
     }
   ]

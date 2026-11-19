@@ -1181,8 +1181,9 @@ if FONT_MODE == "local" and FORM_BACKEND == "vercel":
     site_host = urlsplit(SITE_URL).hostname or "" if SITE_URL else ""
     other_host = (site_host[4:] if site_host.startswith("www.") else "www." + site_host) if site_host else ""
     if other_host:
-        vercel["redirects"] = [{"source": "/:path*", "has": [{"type": "host", "value": other_host}],
-                                "destination": SITE_URL + "/:path*", "permanent": True}]
+        # "/(.*)" statt "/:path*": nur so greift die Regel auch für die Startseite "/" (wie bei den Headern unten)
+        vercel["redirects"] = [{"source": "/(.*)", "has": [{"type": "host", "value": other_host}],
+                                "destination": SITE_URL + "/$1", "permanent": True}]
     (OUT / "vercel.json").write_text(json.dumps(vercel, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     pkg = {
         "name": "nexora-website",

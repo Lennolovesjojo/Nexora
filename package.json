@@ -3,6 +3,7 @@
   "private": true,
   "description": "Website der Nexora Webagentur: statische Seiten und Vercel-Funktionen für Bewerbungs- und Kontaktformular",
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "nodemailer": "^10.6.0"
   }
 }

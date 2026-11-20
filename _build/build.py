@@ -171,6 +171,7 @@ FOOTER = f'''<footer class="site-foot">
     <div class="foot-bottom"><span>© <span data-year>2026</span> Nexora. Alle Rechte vorbehalten.</span><span>Webdesign · Entwicklung · Hosting · Betreuung</span></div>
   </div>
 </footer>
+<script type="module" src="analytics.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

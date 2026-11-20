@@ -80,6 +80,8 @@ Wichtige Einstellungen oben in `build.py`:
 - `ANTWORTZEIT`: was die Bestätigungsmail zum Kontaktformular verspricht
 - `WHATSAPP_NUMBER`, `WHATSAPP_TEXT`: WhatsApp Business
 - `CALENDLY`, `CALENDLY_CONSENT`: Buchungskalender, und ob er erst nach Klick lädt
+- `BESUCHERSTATISTIK`: Besucherzählung mit Vercel Web Analytics (ohne Cookies). Die Zahlen stehen im
+  Vercel-Dashboard unter nexora-website → Analytics. `False` entfernt Skript und Datenschutzabschnitt.
 - `TEAM`: Profile. Fotos quadratisch und mit dem Gesicht in der Mitte als
   `assets/team/vorname-nachname.jpg` ablegen (z. B. `linus-schoeller.jpg`, Umlaute ohne Punkte).
   Beim Bauen werden sie automatisch erkannt, ohne Foto erscheinen die Initialen.

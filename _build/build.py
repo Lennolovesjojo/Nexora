@@ -54,6 +54,13 @@ LIVE = True
 # oder "php" (bewerbung.php und anfrage.php für klassischen Webspace)
 FORM_BACKEND = "vercel"
 
+# Besucherstatistik mit Vercel Web Analytics, ohne Cookies (Lennos Wunsch vom 20.11.2026).
+# Die Zahlen stehen im Vercel-Dashboard: Projekt nexora-website, Reiter "Analytics". Kosten im Pro-Tarif: 0,03 $ je 1.000 Seitenaufrufe.
+# Jede Seite lädt dafür /_vercel/insights/script.js von der eigenen Domain (passt zur Content-Security-Policy),
+# die Datenschutzerklärung bekommt einen eigenen Abschnitt dazu. False = Skript und Abschnitt entfallen.
+BESUCHERSTATISTIK = True
+STATISTIK = BESUCHERSTATISTIK and FORM_BACKEND == "vercel" and FONT_MODE == "local"   # nur auf Vercel, nicht in der Vorschau
+
 # Antwortzeit, die Kontaktseite und Eingangsbestätigung versprechen
 ANTWORTZEIT = "in der Regel innerhalb eines Werktags"
 
@@ -128,6 +135,8 @@ def head(title, desc, path="", extra_class="", base=False, noindex=False):
         '<link rel="stylesheet" href="styles.css">',
         f'<script>{HEAD_JS}</script>',
     ]
+    if STATISTIK:
+        lines.append('<script defer src="/_vercel/insights/script.js"></script>')   # Besucherstatistik (BESUCHERSTATISTIK)
     nl = "\n"
     return f'<!doctype html>\n<html lang="de" class="no-js{extra_class}">\n<head>\n{nl.join(lines)}\n</head>\n<body>\n'
 
@@ -1129,8 +1138,8 @@ else:
 
 CAL_DS = ("Der Kalender wird erst geladen, wenn Sie auf der Seite „Beratungstermin“ auf „Kalender anzeigen“ klicken. Erst dann werden Daten wie Ihre IP-Adresse an Calendly übertragen."
           if CALENDLY_CONSENT else "Der Kalender ist auf der Seite „Beratungstermin“ eingebunden und wird beim Aufruf dieser Seite direkt von Calendly geladen. Dabei werden Daten wie Ihre IP-Adresse an Calendly übertragen, und Calendly kann Cookies setzen.")
-COOKIE_DS = ("Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur Calendly setzen, und zwar erst, wenn Sie den Kalender laden (siehe Abschnitt 6)."
-             if CALENDLY_CONSENT else "Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur der Calendly-Kalender auf der Seite „Beratungstermin“ setzen (siehe Abschnitt 6).")
+COOKIE_DS = ("Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur Calendly setzen, und zwar erst, wenn Sie den Kalender laden (siehe Abschnitt [[calendly]])."
+             if CALENDLY_CONSENT else "Diese Website setzt selbst keine Cookies und speichert nichts in Ihrem Browser. Cookies kann nur der Calendly-Kalender auf der Seite „Beratungstermin“ setzen (siehe Abschnitt [[calendly]]).")
 MAIL_ANBIETER = "STRATO GmbH (Berlin)"   # Postfach und Versand der Formular-Mails
 CAL_RG = ("Ihre Einwilligung, die Sie mit dem Klick auf „Kalender anzeigen“ erteilen (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Sie können sie jederzeit für die Zukunft widerrufen, indem Sie die Seite neu laden und den Kalender nicht mehr öffnen"
           if CALENDLY_CONSENT else "unser berechtigtes Interesse an einer einfachen Online-Terminvereinbarung (Art. 6 Abs. 1 lit. f DSGVO)")
@@ -1138,6 +1147,30 @@ FORM_DS = ("Die Formulare werden über eine Funktion auf Servern von Vercel in F
            if FORM_BACKEND == "vercel" else "Die Formulare werden auf dem Webserver verarbeitet und per E-Mail an uns übermittelt.")
 
 DS_STAND = "November 2026"
+
+# Besucherstatistik (BESUCHERSTATISTIK oben): Kurzfassung in Abschnitt 2, eigener Abschnitt nach dem Hosting, Satz bei den Cookies
+DS_KURZ = ("Wir verarbeiten personenbezogene Daten nur, soweit es für den Betrieb dieser Website, die Beantwortung Ihrer Anfragen, "
+           "die Terminvereinbarung und Bewerbungsverfahren nötig ist, sowie für eine datensparsame Besucherstatistik ohne Cookies. "
+           "Werbe- oder Trackingdienste, die Sie über andere Websites hinweg verfolgen, setzen wir nicht ein."
+           if STATISTIK else
+           "Wir verarbeiten personenbezogene Daten nur, soweit es für den Betrieb dieser Website, die Beantwortung Ihrer Anfragen, "
+           "die Terminvereinbarung und Bewerbungsverfahren nötig ist. Analyse-, Tracking- oder Werbedienste setzen wir nicht ein.")
+DS_STATISTIK = ('<section id="statistik"><h2>4. Besucherstatistik mit Vercel Web Analytics</h2>'
+                '<p>Um zu sehen, wie viele Menschen unsere Website besuchen und welche Seiten sie aufrufen, nutzen wir Vercel Web Analytics, '
+                'einen Dienst unseres Hosters Vercel Inc. (USA). Dafür lädt jede Seite ein kleines Skript von unserer eigenen Domain. '
+                'Es setzt keine Cookies und speichert nichts in Ihrem Browser.</p>'
+                '<p>Bei jedem Seitenaufruf werden der Zeitpunkt, die aufgerufene Adresse, die zuvor besuchte Seite, der ungefähre Standort '
+                '(Land, Region und Stadt) sowie Browser, Betriebssystem und Gerätetyp erfasst. Damit mehrere Seitenaufrufe derselben Person '
+                'an einem Tag als ein Besucher zählen, bildet Vercel aus der Anfrage einen Hashwert, der nach 24 Stunden verworfen wird. '
+                'Ein Wiedererkennen über diesen Tag hinaus ist damit nicht möglich. Wir sehen nur zusammengefasste Zahlen und erkennen daraus '
+                'keine einzelnen Personen.</p>'
+                '<p>Rechtsgrundlage ist unser berechtigtes Interesse an einer datensparsamen Reichweitenmessung, mit der wir unser Angebot '
+                'verbessern (Art. 6 Abs. 1 lit. f DSGVO). Vercel verarbeitet die Daten in unserem Auftrag; für den Vertrag und Übermittlungen '
+                'in die USA gilt das oben zum Hosting Gesagte. Wenn Sie nicht erfasst werden möchten, können Sie JavaScript deaktivieren oder '
+                'einen Inhaltsblocker nutzen. Mehr dazu in den <a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" '
+                'rel="noopener">Hinweisen von Vercel zu Web Analytics</a>.</p></section>'
+                if STATISTIK else "")
+STAT_COOKIE = " Auch die Besucherstatistik kommt ohne Cookies aus." if STATISTIK else ""
 DS_NOTE = ('<p class="legal-note">Die markierten Felder werden noch ergänzt.</p>' if IMPRESSUM_OFFEN and ZEIGE_PLATZHALTER else "")
 
 _tel, _rg, _hrb = wert(TELEFON, "Telefonnummer"), wert(REGISTERGERICHT, "Amtsgericht"), wert(HRB, "HRB-Nummer")
@@ -1192,19 +1225,28 @@ datenschutz_body = f'''<section class="page-hero">
     <!-- Entwurf auf Grundlage der tatsächlich genutzten Dienste. Vor dem Livegang von einer Fachperson oder einem Generator prüfen lassen. -->
     {DS_NOTE}
     <section><h2>1. Verantwortliche Stelle</h2><p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p><p>{DS_VERANTWORTLICH}</p></section>
-    <section><h2>2. Das Wichtigste in Kürze</h2><p>Wir verarbeiten personenbezogene Daten nur, soweit es für den Betrieb dieser Website, die Beantwortung Ihrer Anfragen, die Terminvereinbarung und Bewerbungsverfahren nötig ist. Analyse-, Tracking- oder Werbedienste setzen wir nicht ein. Personenbezogene Daten sind alle Angaben, mit denen Sie persönlich erkannt werden können, zum Beispiel Name, E-Mail-Adresse oder IP-Adresse.</p></section>
+    <section><h2>2. Das Wichtigste in Kürze</h2><p>{DS_KURZ} Personenbezogene Daten sind alle Angaben, mit denen Sie persönlich erkannt werden können, zum Beispiel Name, E-Mail-Adresse oder IP-Adresse.</p></section>
     <section><h2>3. Hosting und Server-Logfiles</h2><p>Diese Website wird bei Vercel Inc. (USA) gehostet. Die Seiten werden über das weltweite Servernetz von Vercel ausgeliefert, die Formulare auf Servern von Vercel in Frankfurt am Main verarbeitet. Bei jedem Aufruf verarbeitet Vercel technisch notwendige Daten wie IP-Adresse, Datum und Uhrzeit, die aufgerufene Seite, die zuvor besuchte Seite sowie Browser und Betriebssystem. Das ist nötig, um die Website auszuliefern und vor Angriffen zu schützen.</p><p>Rechtsgrundlage ist unser berechtigtes Interesse an einem sicheren und zuverlässigen Betrieb der Website (Art. 6 Abs. 1 lit. f DSGVO). Mit Vercel besteht ein Vertrag zur Auftragsverarbeitung. Soweit Daten in die USA übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der EU-Kommission zum EU-US Data Privacy Framework, soweit Vercel danach zertifiziert ist, und auf die Standardvertragsklauseln der EU-Kommission.</p></section>
+    {DS_STATISTIK}
     <section id="anfrage"><h2>4. Kontaktformular und E-Mail</h2><p>Wenn Sie uns über das Kontaktformular schreiben, verarbeiten wir Ihr Anliegen, Ihren Namen, Ihre E-Mail-Adresse und Ihre Nachricht sowie, falls angegeben, Unternehmen, Telefonnummer und Website. {FORM_DS} Auf dem Webserver wird nichts gespeichert. An die angegebene Adresse schicken wir automatisch eine Eingangsbestätigung. Schreiben Sie uns direkt per E-Mail, gilt das sinngemäß.</p><p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, wenn Ihre Anfrage einen Vertrag oder dessen Vorbereitung betrifft, und sonst unser berechtigtes Interesse an der Beantwortung von Anfragen (Art. 6 Abs. 1 lit. f DSGVO).</p><p>Zum Schutz vor Missbrauch enthält das Formular ein für Menschen unsichtbares Feld und misst, wie lange das Ausfüllen dauert. Außerdem merkt sich der Server kurzzeitig im Arbeitsspeicher, wie viele Anfragen von einer IP-Adresse kommen, um Massenanfragen zu begrenzen. Diese Angaben werden nicht dauerhaft gespeichert, Cookies werden dafür nicht verwendet.</p><p>Ihre Anfrage löschen wir, sobald sie erledigt ist und keine gesetzlichen Aufbewahrungspflichten entgegenstehen, etwa für Geschäftsbriefe (bis zu sechs Jahre) oder steuerlich relevante Unterlagen (bis zu zehn Jahre).</p></section>
     <section id="bewerbung"><h2>5. Bewerbungen</h2><p>Wenn Sie sich über unser Formular bewerben, verarbeiten wir Ihren Namen, Ihre E-Mail-Adresse, die gewünschte Stelle und Ihre Nachricht sowie, falls angegeben, Telefonnummer, einen Link zu Profil oder Portfolio und Ihren Lebenslauf. Die Bewerbung wird wie beim Kontaktformular über Vercel in Frankfurt am Main und per E-Mail über {MAIL_ANBIETER} an uns übermittelt und nicht auf dem Webserver gespeichert. Sie erhalten eine Eingangsbestätigung.</p><p>Rechtsgrundlage ist die Anbahnung eines Beschäftigungsverhältnisses (Art. 6 Abs. 1 lit. b DSGVO). Zugriff haben nur die Personen, die am Bewerbungsverfahren beteiligt sind. Kommt es zu einer Einstellung, nehmen wir Ihre Unterlagen in die Personalakte auf. Andernfalls löschen wir Ihre Bewerbung spätestens sechs Monate nach Abschluss des Verfahrens, außer Sie haben einer längeren Speicherung zugestimmt.</p></section>
     <section id="calendly"><h2>6. Terminbuchung über Calendly</h2><p>Für Beratungstermine nutzen wir Calendly, einen Dienst der Calendly LLC (USA). {CAL_DS} Wenn Sie einen Termin buchen, verarbeitet Calendly Ihre Eingaben wie Name, E-Mail-Adresse und den gewählten Termin und übermittelt sie an uns.</p><p>Rechtsgrundlage für die Buchung ist Art. 6 Abs. 1 lit. b DSGVO, für das Laden des Kalenders {CAL_RG}. Soweit Calendly Daten in den USA verarbeitet, stützt sich das auf den Angemessenheitsbeschluss zum EU-US Data Privacy Framework, soweit Calendly danach zertifiziert ist, und auf die Standardvertragsklauseln der EU-Kommission. Mehr dazu in der <a href="https://calendly.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Calendly</a>.</p></section>
     <section><h2>7. Kontakt per WhatsApp</h2><p>Unsere WhatsApp-Buttons sind einfache Links. Eine Verbindung zu WhatsApp entsteht erst, wenn Sie darauf klicken. Ab dann gelten auch die Datenschutzbestimmungen von WhatsApp (WhatsApp Ireland Limited, Irland, ein Unternehmen der Meta-Gruppe), und WhatsApp kann Daten in die USA übermitteln. Wenn Sie uns schreiben, verarbeiten wir Ihre Telefonnummer, Ihren Profilnamen und Ihre Nachrichten, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b oder lit. f DSGVO). Möchten Sie WhatsApp nicht nutzen, erreichen Sie uns genauso per E-Mail oder über das Kontaktformular.</p></section>
-    <section><h2>8. Cookies und Speicher im Browser</h2><p>{COOKIE_DS} Analyse- oder Werbe-Cookies verwenden wir nicht.</p></section>
+    <section><h2>8. Cookies und Speicher im Browser</h2><p>{COOKIE_DS} Analyse- oder Werbe-Cookies verwenden wir nicht.{STAT_COOKIE}</p></section>
     <section><h2>9. Schriftarten</h2><p>Die Schriftarten dieser Website sind lokal eingebunden. Beim Aufruf wird keine Verbindung zu Servern von Google hergestellt.</p></section>
     <section><h2>10. Verschlüsselung</h2><p>Diese Website nutzt aus Sicherheitsgründen eine TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie an „https://“ in der Adresszeile Ihres Browsers.</p></section>
     <section><h2>11. Ihre Rechte</h2><p>Sie haben jederzeit das Recht auf</p><ul><li>Auskunft über Ihre bei uns gespeicherten Daten (Art. 15 DSGVO)</li><li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li><li>Löschung (Art. 17 DSGVO) und Einschränkung der Verarbeitung (Art. 18 DSGVO)</li><li>Datenübertragbarkeit (Art. 20 DSGVO)</li><li>Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)</li><li>Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77 DSGVO)</li></ul><p><b>Widerspruchsrecht:</b> Verarbeiten wir Daten auf Grundlage unseres berechtigten Interesses (Art. 6 Abs. 1 lit. f DSGVO), können Sie dem aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen (Art. 21 DSGVO).</p><p>Für all das genügt eine formlose Nachricht an <a href="mailto:{INFO_MAIL}">{INFO_MAIL}</a>. Eine automatisierte Entscheidungsfindung einschließlich Profiling findet nicht statt.</p><p>Stand: {DS_STAND}</p></section>
   </div></div>
 </section>
 '''
+
+# Die Abschnitte werden der Reihe nach nummeriert (die Zahlen im Text oben sind nur Platzhalter).
+# Verweise wie [[calendly]] werden zur Nummer des Abschnitts mit dieser id.
+_nr = iter(range(1, 100))
+datenschutz_body = re.sub(r"<h2>\d+\. ", lambda m: f"<h2>{next(_nr)}. ", datenschutz_body)
+for _id, _n in re.findall(r'<section id="([\w-]+)"><h2>(\d+)\. ', datenschutz_body):
+    datenschutz_body = datenschutz_body.replace(f"[[{_id}]]", _n)
+assert "[[" not in datenschutz_body, "Verweis auf einen unbekannten Abschnitt in der Datenschutzerklärung"
 
 page("impressum.html", "Impressum · Nexora", IMP_META, "", impressum_body)
 page("datenschutz.html", "Datenschutz · Nexora", "Datenschutzerklärung der Nexora Webagentur.", "", datenschutz_body)
